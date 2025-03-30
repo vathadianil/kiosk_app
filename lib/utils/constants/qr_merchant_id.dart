@@ -6,4 +6,5 @@ class QrMerchantDetails {
   static const equipmentId = 'KSK 0001';
   static const mobileNo = '9999999999';
   static const userId = '$sourceStationId$mobileNo';
+  static const useMqtt = true;
 }

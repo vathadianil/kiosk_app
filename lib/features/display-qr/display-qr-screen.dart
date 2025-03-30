@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:kiosk_app/common/widgets/layout/t_background_gradient.dart';
 import 'package:kiosk_app/features/book-qr/models/create_spos_order.dart';
@@ -302,22 +303,25 @@ class BuildTicket extends StatelessWidget {
                                   fontSize: 10,
                                 ),
                           ),
-                          Text(
-                            tickets[index].toStationId != null
-                                ? THelperFunctions.getStationFromStationId(
-                                        tickets[index].toStationId!,
-                                        stationList)
-                                    .name!
-                                    .replaceFirst(' ', '\n')
-                                : '',
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelSmall!
-                                .copyWith(
-                                  color: TColors.black,
-                                  fontSize: 10,
-                                ),
-                            textAlign: TextAlign.end,
+                          SizedBox(
+                            child: Text(
+                              tickets[index].toStationId != null
+                                  ? THelperFunctions.getStationFromStationId(
+                                          tickets[index].toStationId!,
+                                          stationList)
+                                      .name!
+                                      .replaceFirst(' ', '\n')
+                                      .replaceFirst('-', '\n')
+                                  : '',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelSmall!
+                                  .copyWith(
+                                    color: TColors.black,
+                                    fontSize: 10,
+                                  ),
+                              textAlign: TextAlign.end,
+                            ),
                           ),
                         ],
                       ),

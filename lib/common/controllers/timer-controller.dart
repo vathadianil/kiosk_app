@@ -24,7 +24,7 @@ class TimerController extends GetxController {
         if (kDebugMode) {
           print('Timer: ${secondsElapsed.value}');
         }
-        if (secondsElapsed.value >= 120) {
+        if (secondsElapsed.value >= 6000) {
           goToAdvertisementScreen();
         }
       }

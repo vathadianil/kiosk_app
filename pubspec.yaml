@@ -28,6 +28,7 @@ dependencies:
   image: ^3.3.0
   path_provider: ^2.1.4
   permission_handler: ^11.3.1
+  mqtt_client: ^10.3.0
 
   # Icons
   iconsax: ^0.0.8
@@ -49,7 +50,10 @@ dependencies:
   flutter_pos_printer_platform_image_3:
     path: ./flutter_pos_printer_platform
   encrypt: ^5.0.3
+  flutter_localization: ^0.2.1
 
+  #Dropdown package
+  dropdown_search: ^5.0.0
   #--------------- ./ PACKAGES END ------------------#
 
 dev_dependencies:

@@ -8,10 +8,10 @@ import 'package:kiosk_app/features/payment-qr/models/payment-confim-model.dart';
 import 'package:kiosk_app/repositories/book-qr/book-qr-repository.dart';
 import 'package:kiosk_app/utils/constants/qr_merchant_id.dart';
 import 'package:kiosk_app/utils/local_storage/storage_utility.dart';
-// import 'package:mqtt_client/mqtt_client.dart';
-// import 'package:mqtt_client/mqtt_server_client.dart';
+import 'package:mqtt_client/mqtt_client.dart';
+import 'package:mqtt_client/mqtt_server_client.dart';
 import 'dart:async';
-// import 'dart:convert';
+import 'dart:convert';
 
 class GenerateTicketController extends GetxController {
   static GenerateTicketController get instance => Get.find();
@@ -34,10 +34,113 @@ class GenerateTicketController extends GetxController {
   Timer? _timer;
   var isDataFound = false.obs;
 
+  late MqttServerClient client;
+  String brokerUrl = "mqtt.afc-transit.com"; // Your MQTT broker URL
+  int port = 8883; // Use 8883 for secure connection (SSL/TLS)
+  String clientId = TLocalStorage().readData('equipmentId');
+
   @override
   void onInit() {
     super.onInit();
-    startApiPolling(); // Start API polling when the controller is initialized
+    if (QrMerchantDetails.useMqtt) {
+      connectToMqtt(createOrderData.orderId ?? '');
+    } else {
+      startApiPolling(); // Start API polling when the controller is initialized
+    }
+  }
+
+  /// Connect to MQTT Broker and Subscribe to Topic
+  Future<void> connectToMqtt(String orderId) async {
+    client = MqttServerClient(
+      brokerUrl,
+      clientId,
+    );
+    client.secure = true;
+    client.port = port;
+
+    // Set Keep Alive Interval
+    client.keepAlivePeriod = 20;
+
+    client.onConnected = onConnected;
+    // client.onDisconnected = onDisconnected;
+
+    // Setup connection options
+    final connMessage = MqttConnectMessage()
+        .withClientIdentifier(
+          clientId,
+        )
+        .authenticateAs('kskuatmqtt', 'kskmqtt@312')
+        .startClean() // Start with a clean session
+        .withWillQos(MqttQos.atMostOnce);
+
+    client.connectionMessage = connMessage;
+
+    try {
+      print("🔌 Connecting to MQTT...");
+      await client.connect();
+      if (client.connectionStatus!.state == MqttConnectionState.connected) {
+        print("✅ Connected to MQTT broker");
+        isConnected.value = true;
+        subscribeToTopic(orderId);
+      } else {
+        print(
+            "❌ Failed to connect to MQTT. Status: ${client.connectionStatus}");
+        isConnected.value = false;
+      }
+    } catch (e) {
+      print("❌ MQTT Connection Error: $e");
+      isConnected.value = false;
+      reconnectMqtt(); // Try to reconnect if connection fails
+    }
+  }
+
+  /// Reconnect to MQTT Broker after Delay
+  void reconnectMqtt() {
+    Future.delayed(const Duration(seconds: 5), () {
+      if (!isConnected.value) {
+        print("🔄 Attempting to reconnect...");
+        connectToMqtt(createOrderData.orderId ?? '');
+      }
+    });
+  }
+
+  /// Handle MQTT Connection Success
+  void onConnected() {
+    print("✅ MQTT Connection Established.");
+    isConnected.value = true;
+  }
+
+  void onDisconnected() {
+    if (!isDataFound.value) {
+      reconnectMqtt();
+    }
+  }
+
+  /// Subscribe to Payment Status Topic
+  void subscribeToTopic(String orderId) {
+    final topic = orderId;
+    client.subscribe(topic, MqttQos.atMostOnce);
+    print("📡 Subscribed to topic: $topic");
+
+    // Listen for incoming messages
+    client.updates!.listen((List<MqttReceivedMessage<MqttMessage>> messages) {
+      final MqttPublishMessage message =
+          messages[0].payload as MqttPublishMessage;
+      final String payload =
+          MqttPublishPayload.bytesToStringAsString(message.payload.message);
+
+      // Process Payment Status
+      final data = jsonDecode(payload);
+      final confirmOrderData = PaymentConfirmModel.fromJson(data);
+      if (confirmOrderData.orderId == orderId) {
+        if (confirmOrderData.paymentStatus == "SUCCESS") {
+          isDataFound.value = true;
+          generateTicket(confirmOrderData);
+        } else {
+          gotoPaymentProcessingScreen(confirmOrderData: confirmOrderData);
+        }
+      }
+    });
   }
 
   /// Start polling API every 5 seconds
@@ -172,6 +275,14 @@ class GenerateTicketController extends GetxController {
   @override
   void onClose() {
     super.onClose();
-    stopApiPolling();
+    if (QrMerchantDetails.useMqtt) {
+      if (client.connectionStatus!.state == MqttConnectionState.connected) {
+        print("🔌 Disconnecting MQTT client...");
+        client.disconnect();
+        isConnected.value = false;
+      }
+    } else {
+      stopApiPolling();
+    }
   }
 }

@@ -10,11 +10,12 @@ import 'package:kiosk_app/features/payment-qr/controllers/payment-timer.dart';
 import 'package:kiosk_app/features/payment-qr/widgets/payment-qr-display-section.dart';
 import 'package:kiosk_app/features/payment-qr/widgets/time-elapse-container.dart';
 import 'package:kiosk_app/utils/constants/colors.dart';
-// import 'package:kiosk_app/utils/constants/image_strings.dart';
+import 'package:kiosk_app/utils/constants/image_strings.dart';
+import 'package:kiosk_app/utils/constants/qr_merchant_id.dart';
 import 'package:kiosk_app/utils/constants/text_size.dart';
 import 'package:kiosk_app/utils/device/device_utility.dart';
 import 'package:kiosk_app/features/payment-qr/controllers/generate_ticket_controller.dart';
-// import 'package:kiosk_app/utils/loaders/animation_loader.dart';
+import 'package:kiosk_app/utils/loaders/animation_loader.dart';
 import 'package:kiosk_app/utils/local_storage/storage_utility.dart';
 
 class PaymentQrScreen extends StatelessWidget {
@@ -62,10 +63,10 @@ class PaymentQrScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: TColors.black,
       appBar: TAppBar(
-        showBackArrow: false,
+        showBackArrow: true,
         iconColor: TColors.white,
         title: Text(
-          'Scan to Pay',
+          '',
           style: Theme.of(context).textTheme.bodyLarge,
           textScaler: TextScaleUtil.getScaledText(context),
         ),
@@ -82,47 +83,46 @@ class PaymentQrScreen extends StatelessWidget {
             onTap: () async {
               TimerController.instance.resetTimer();
             },
-            child:
-                // Obx(
-                //   () =>
-                Column(
-              children: [
-                // if (GenerateTicketController.instance.isConnected.value)
-                PaymentQrDisplaySection(
-                    createTerminalTrxData: createTerminalTrxData),
-                // else
-                //   const TAnimationLoaderWidget(
-                //     animation: TImages.trainAnimation,
-                //     widthFactor: .5,
-                //     text: 'Generating Payment QR Code. Please wait...',
-                //   ),
-                SizedBox(
-                  height: screenWidth * .06,
-                ),
-                Stack(
-                  children: [
-                    const TimeElaspseContainerScreen(),
-                    Positioned(
-                        top: 37,
-                        left: 30,
-                        child: Obx(
-                          () => Text(
-                            '${(paymentTimerController.secondsElapsed.value ~/ 60).toString().padLeft(2, "0")}:${(paymentTimerController.secondsElapsed.value % 60).toString().padLeft(2, '0')}',
-                          ),
-                        ))
-                  ],
-                ),
-                SizedBox(
-                  height: screenWidth * .02,
-                ),
-                const Text('Waitng for Payment Confirmation'),
-                SizedBox(
-                  height: screenWidth * .1,
-                ),
-                const Hero(tag: 'img', child: HomeCarousel()),
-              ],
+            child: Obx(
+              () => Column(
+                children: [
+                  if (GenerateTicketController.instance.isConnected.value ||
+                      !QrMerchantDetails.useMqtt)
+                    PaymentQrDisplaySection(
+                        createTerminalTrxData: createTerminalTrxData)
+                  else
+                    const TAnimationLoaderWidget(
+                      animation: TImages.trainAnimation,
+                      widthFactor: .5,
+                      text: 'Generating Payment QR Code. Please wait...',
+                    ),
+                  SizedBox(
+                    height: screenWidth * .06,
+                  ),
+                  Stack(
+                    children: [
+                      const TimeElaspseContainerScreen(),
+                      Positioned(
+                          top: 37,
+                          left: 30,
+                          child: Obx(
+                            () => Text(
+                              '${(paymentTimerController.secondsElapsed.value ~/ 60).toString().padLeft(2, "0")}:${(paymentTimerController.secondsElapsed.value % 60).toString().padLeft(2, '0')}',
+                            ),
+                          ))
+                    ],
+                  ),
+                  SizedBox(
+                    height: screenWidth * .02,
+                  ),
+                  const Text('Waitng for Payment Confirmation'),
+                  SizedBox(
+                    height: screenWidth * .1,
+                  ),
+                  const Hero(tag: 'img', child: HomeCarousel()),
+                ],
+              ),
             ),
-            // ),
           ),
         ),
       ),

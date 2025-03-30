@@ -12,7 +12,8 @@ class ConfigControoler extends GetxController {
   RxString equipmentId = ''.obs;
   RxString mobileNumber = ''.obs;
   RxString terminalId = ''.obs;
-  RxString isProd = ''.obs;
+  RxString isProd = 'Y'.obs;
+  RxString useMqtt = 'Y'.obs;
   submitDetails() {
     //Form Validation
     if (!formKey.currentState!.validate()) {

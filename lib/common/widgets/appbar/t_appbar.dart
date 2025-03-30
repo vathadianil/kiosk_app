@@ -45,6 +45,7 @@ class TAppBar extends StatelessWidget implements PreferredSizeWidget {
             ? IconButton(
                 onPressed: () {
                   Get.back();
+                  TimerController.instance.resumeTimer();
                   TimerController.instance.resetTimer();
                 },
                 icon: Icon(

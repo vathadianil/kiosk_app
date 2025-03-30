@@ -123,11 +123,7 @@ class BookQrController extends GetxController {
       final userId = TLocalStorage().readData('userId');
       final phoneNumber = TLocalStorage().readData('mobileNo');
       final terminalId = int.tryParse(TLocalStorage().readData('terminalId'));
-      final souceStationId = TLocalStorage().readData('sourceStationId');
-      // final orderId =
-      //     "KSKP$souceStationId${DateTime.now().millisecondsSinceEpoch}";
-      final orderId =
-          "UATP$souceStationId${DateTime.now().millisecondsSinceEpoch}";
+      final orderId = "KSKP$terminalId${DateTime.now().millisecondsSinceEpoch}";
       String isProd = TLocalStorage().readData('isProd');
 
       final payload = {

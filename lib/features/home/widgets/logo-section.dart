@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kiosk_app/features/home/controllers/setting_controller.dart';
 import 'package:kiosk_app/utils/constants/colors.dart';
 import 'package:kiosk_app/utils/constants/image_strings.dart';
 import 'package:kiosk_app/utils/device/device_utility.dart';
@@ -14,7 +15,6 @@ class LogoSection extends StatelessWidget {
     final sourceStationId = TLocalStorage().readData('sourceStationId');
     final sourceStationName = TLocalStorage().readData('sourceStationName');
     final equipmentId = TLocalStorage().readData('equipmentId');
-
     final screenWidth = TDeviceUtils.getScreenWidth(context);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: screenWidth * .05),
@@ -23,9 +23,14 @@ class LogoSection extends StatelessWidget {
         children: [
           Row(
             children: [
-              Image.asset(
-                TImages.appLogo,
-                width: screenWidth * .15,
+              GestureDetector(
+                onTap: () {
+                  SettingController.instance.onLogoTapped();
+                },
+                child: Image.asset(
+                  TImages.appLogo,
+                  width: screenWidth * .15,
+                ),
               ),
               SizedBox(
                 width: screenWidth * .05,
