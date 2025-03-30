@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:kiosk_app/common/components/custom_drop_down.dart';
 import 'package:kiosk_app/common/widgets/button/t_neomarphism_btn.dart';
 import 'package:kiosk_app/common/widgets/dropdown/t_dropdown.dart';
@@ -71,53 +72,83 @@ class ConfigScreen extends StatelessWidget {
                       key: controller.formKey,
                       child: Column(
                         children: [
-                          TDropdown(
-                            value: controller.stationId.value != ''
-                                ? THelperFunctions.getStationFromStationId(
-                                            controller.stationId.value,
-                                            stationListController.stationList)
-                                        .name ??
-                                    ''
-                                : '',
-                            items: stationListController.stationList
-                                .map((item) => item.stationId!)
-                                .toList()
-                              ..sort(),
-                            labelText: 'Select Source Station Id',
-                            labelColor: TColors.white,
-                            onChanged: (value) {
-                              if (value != '') {}
-                            },
-                          ),
-                          const SizedBox(height: TSizes.spaceBtwSections),
-                          TextFormField(
-                            keyboardType: TextInputType.text,
-                            onChanged: (value) =>
-                                controller.stationName.value = value,
-                            decoration: InputDecoration(
-                              label: Text(
-                                "Station Name",
-                                style: Theme.of(context).textTheme.bodyMedium,
-                              ),
+                          Obx(
+                            () => TDropdown(
+                              value: controller.stationName.value != ''
+                                  ? THelperFunctions.getStationFromStationName(
+                                              controller.stationName.value,
+                                              stationListController.stationList)
+                                          .name ??
+                                      ''
+                                  : '',
+                              items: stationListController.stationList
+                                  .map((item) => item.name!)
+                                  .toList()
+                                ..sort(),
+                              labelText: 'Source Station Name',
+                              labelColor: TColors.white,
+                              onChanged: (value) {
+                                if (value != '') {
+                                  controller.stationName.value = value!;
+                                }
+                              },
                             ),
                           ),
                           const SizedBox(height: TSizes.spaceBtwSections),
-                          TextFormField(
-                            keyboardType: TextInputType.text,
-                            onChanged: (value) =>
-                                controller.equipmentId.value = value,
-                            decoration: InputDecoration(
-                              label: Text(
-                                "Equipment Id",
-                                style: Theme.of(context).textTheme.bodyMedium,
+                          Obx(
+                            () => CustomDropdown(
+                              labelText: 'Equipment Id',
+                              value: controller.equipmentId.value,
+                              items: const [
+                                DropdownMenuItem(
+                                  value: "0001",
+                                  child: Text(
+                                    "0001",
+                                  ),
+                                ),
+                                DropdownMenuItem(
+                                  value: "0002",
+                                  child: Text(
+                                    "0002",
+                                  ),
+                                ),
+                                DropdownMenuItem(
+                                  value: "0011",
+                                  child: Text(
+                                    "0011",
+                                  ),
+                                ),
+                                DropdownMenuItem(
+                                  value: "0012",
+                                  child: Text(
+                                    "0012",
+                                  ),
+                                ),
+                              ],
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: screenWidth * .013,
+                                horizontal: screenWidth * .04,
                               ),
+
+                              onChanged: (value) {
+                                if (value != '') {
+                                  controller.equipmentId.value = value!;
+                                }
+                              }, // Set to null when not editable
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please Select Field';
+                                }
+                                return null;
+                              },
                             ),
                           ),
                           const SizedBox(height: TSizes.spaceBtwSections),
                           TextFormField(
                             keyboardType: TextInputType.number,
+                            controller: controller.mobileController,
                             onChanged: (value) =>
-                                controller.mobileNumber.value = value,
+                                controller.mobileController.text = value,
                             decoration: InputDecoration(
                               label: Text(
                                 "Mobile Number",
@@ -128,8 +159,9 @@ class ConfigScreen extends StatelessWidget {
                           const SizedBox(height: TSizes.spaceBtwSections),
                           TextFormField(
                             keyboardType: TextInputType.number,
+                            controller: controller.terminalController,
                             onChanged: (value) =>
-                                controller.terminalId.value = value,
+                                controller.terminalController.text = value,
                             decoration: InputDecoration(
                               label: Text(
                                 "Terminal Id",
@@ -139,8 +171,8 @@ class ConfigScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: TSizes.spaceBtwSections),
                           CustomDropdown(
-                            labelText: 'Is Production',
-                            value: controller.isProd.value,
+                            labelText: 'Enable Mqtt',
+                            value: controller.useMqtt.value,
                             items: const [
                               DropdownMenuItem(
                                 value: "Y",
@@ -160,39 +192,11 @@ class ConfigScreen extends StatelessWidget {
                               horizontal: screenWidth * .04,
                             ),
 
-                            onChanged:
-                                (value) {}, // Set to null when not editable
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please Select Field';
+                            onChanged: (value) {
+                              if (value != '') {
+                                controller.useMqtt.value = value!;
                               }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: TSizes.spaceBtwSections),
-                          CustomDropdown(
-                            labelText: 'Enable Mqtt',
-                            value: controller.useMqtt.value,
-                            items: const [
-                              DropdownMenuItem(
-                                value: "Y",
-                                child: Text(
-                                  "Yes",
-                                ),
-                              ),
-                              DropdownMenuItem(
-                                  value: "N",
-                                  child: Text(
-                                    "No",
-                                  )),
-                            ],
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: screenWidth * .013,
-                              horizontal: screenWidth * .04,
-                            ),
-
-                            onChanged:
-                                (value) {}, // Set to null when not editable
+                            }, // Set to null when not editable
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Please Select Field';

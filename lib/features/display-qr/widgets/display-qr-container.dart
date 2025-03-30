@@ -46,6 +46,7 @@ class DisplayQrContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final sourceStationId = TLocalStorage().readData('sourceStationId');
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -125,20 +126,11 @@ class DisplayQrContainer extends StatelessWidget {
                           btnColor: PrinterController.instance.isPrinting.value
                               ? TColors.grey
                               : TColors.primary,
-                          onPressed: () async {
-                            displayQrController.isPrintSubmitted.value = true;
-                            if (PrinterController.instance.isPrinting.value) {
-                              return;
-                            }
-
-                            PrinterController.instance.isPrinting.value = true;
-                            for (var index = 0;
-                                index < tickets.length;
-                                index++) {
-                              await PrinterController.instance
-                                  .printTicket(ticketKeys[index]);
-                            }
-                            PrinterController.instance.isPrinting.value = false;
+                          onPressed: () {
+                            displayQrController.printTicket(
+                              tickets.length,
+                              ticketKeys,
+                            );
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -151,7 +143,7 @@ class DisplayQrContainer extends StatelessWidget {
                               Text(
                                 PrinterController.instance.isPrinting.value
                                     ? "Printing..."
-                                    : 'Print Ticket',
+                                    : 'Re-Print Ticket',
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyLarge!

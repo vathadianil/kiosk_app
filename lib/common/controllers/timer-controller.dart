@@ -8,6 +8,7 @@ class TimerController extends GetxController {
   Timer? _timer;
   var secondsElapsed = 0.obs;
   var isPaused = false.obs;
+  var maxTime = 120.obs;
 
   @override
   void onInit() {
@@ -24,15 +25,16 @@ class TimerController extends GetxController {
         if (kDebugMode) {
           print('Timer: ${secondsElapsed.value}');
         }
-        if (secondsElapsed.value >= 6000) {
+        if (secondsElapsed.value >= maxTime.value) {
           goToAdvertisementScreen();
         }
       }
     });
   }
 
-  void resetTimer() {
+  void resetTimer({maxWaitTime = 120}) {
     secondsElapsed.value = 0; // Reset timer
+    maxTime.value = maxWaitTime;
   }
 
   /// Navigates to Advertisement Screen after timeout

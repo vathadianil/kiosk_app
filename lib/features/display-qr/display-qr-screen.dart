@@ -36,7 +36,6 @@ class DisplayQrScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final displayQrController = Get.put(PrintSubmitController());
     List<GlobalKey> ticketKeys = [];
     final screenHeight = TDeviceUtils.getScreenHeight();
     final screenWidth = TDeviceUtils.getScreenWidth(context);
@@ -46,6 +45,12 @@ class DisplayQrScreen extends StatelessWidget {
     }
 
     generateTicketKeys(tickets.length);
+
+    final displayQrController = Get.put(PrintSubmitController(
+      ticketCount: tickets.length,
+      ticketKeys: ticketKeys,
+      canPrint: true,
+    ));
 
     return Scaffold(
       body: SingleChildScrollView(

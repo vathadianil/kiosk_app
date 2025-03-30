@@ -124,7 +124,7 @@ class BookQrController extends GetxController {
       final phoneNumber = TLocalStorage().readData('mobileNo');
       final terminalId = int.tryParse(TLocalStorage().readData('terminalId'));
       final orderId = "KSKP$terminalId${DateTime.now().millisecondsSinceEpoch}";
-      String isProd = TLocalStorage().readData('isProd');
+      bool isProd = QrMerchantDetails.isProd;
 
       final payload = {
         "order_amount": getOrderAmount(),
@@ -137,7 +137,7 @@ class BookQrController extends GetxController {
         },
         "order_meta": {
           "return_url": "",
-          "notify_url": isProd == 'Y'
+          "notify_url": isProd
               ? ApiEndPoint.cashfreeWebhookUrlProd
               : ApiEndPoint.cashfreeWebhookUrlForUat,
           "payment_methods": ""

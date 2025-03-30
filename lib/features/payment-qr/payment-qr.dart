@@ -2,16 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kiosk_app/common/controllers/timer-controller.dart';
 import 'package:kiosk_app/common/widgets/appbar/t_appbar.dart';
+import 'package:kiosk_app/common/widgets/button/t_neomarphism_btn.dart';
 import 'package:kiosk_app/features/book-qr/controller/station_list_controller.dart';
 import 'package:kiosk_app/features/book-qr/models/create_spos_order.dart';
 import 'package:kiosk_app/features/book-qr/models/create_terminla_transaction_model.dart';
+import 'package:kiosk_app/features/home/home.dart';
 import 'package:kiosk_app/features/home/widgets/home-carousel.dart';
 import 'package:kiosk_app/features/payment-qr/controllers/payment-timer.dart';
 import 'package:kiosk_app/features/payment-qr/widgets/payment-qr-display-section.dart';
 import 'package:kiosk_app/features/payment-qr/widgets/time-elapse-container.dart';
 import 'package:kiosk_app/utils/constants/colors.dart';
 import 'package:kiosk_app/utils/constants/image_strings.dart';
-import 'package:kiosk_app/utils/constants/qr_merchant_id.dart';
 import 'package:kiosk_app/utils/constants/text_size.dart';
 import 'package:kiosk_app/utils/device/device_utility.dart';
 import 'package:kiosk_app/features/payment-qr/controllers/generate_ticket_controller.dart';
@@ -87,7 +88,7 @@ class PaymentQrScreen extends StatelessWidget {
               () => Column(
                 children: [
                   if (GenerateTicketController.instance.isConnected.value ||
-                      !QrMerchantDetails.useMqtt)
+                      !(TLocalStorage().readData('useMqtt') == 'Y'))
                     PaymentQrDisplaySection(
                         createTerminalTrxData: createTerminalTrxData)
                   else
@@ -116,6 +117,17 @@ class PaymentQrScreen extends StatelessWidget {
                     height: screenWidth * .02,
                   ),
                   const Text('Waitng for Payment Confirmation'),
+                  SizedBox(
+                    height: screenWidth * .03,
+                  ),
+                  TNeomarphismBtn(
+                    onPressed: () {
+                      TimerController.instance.resumeTimer();
+                      TimerController.instance.resetTimer();
+                      Get.offAll(() => const HomeScreen());
+                    },
+                    child: const Text('Cancel Payment'),
+                  ),
                   SizedBox(
                     height: screenWidth * .1,
                   ),

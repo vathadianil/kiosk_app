@@ -7,19 +7,6 @@ import 'package:kiosk_app/utils/local_storage/storage_utility.dart';
 class ConfigRepository extends GetxController {
   static ConfigRepository get instance => Get.find();
 
-  // @override
-  // void onInit() {
-  //   // TODO: i           mplement onInit
-  //   super.onInit();
-  //   TLocalStorage().saveData('sourceStationId', '0301');
-  //   TLocalStorage().saveData('sourceStationName', 'Nagole');
-  //   TLocalStorage().saveData('equipmentId', 'KSKNAG0001');
-  //   TLocalStorage().saveData('mobileNo', '9999999999');
-  //   TLocalStorage().saveData('terminalId', '31548');
-  //   TLocalStorage().saveData('isProd', 'N');
-  //   TLocalStorage().saveData('userId', '03019999999999');
-  // }
-
   //Variables
   final deviceStorage = GetStorage();
 

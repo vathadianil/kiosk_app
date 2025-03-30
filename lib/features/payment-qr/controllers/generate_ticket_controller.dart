@@ -42,7 +42,7 @@ class GenerateTicketController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    if (QrMerchantDetails.useMqtt) {
+    if (TLocalStorage().readData('useMqtt') == 'Y') {
       connectToMqtt(createOrderData.orderId ?? '');
     } else {
       startApiPolling(); // Start API polling when the controller is initialized
@@ -275,9 +275,12 @@ class GenerateTicketController extends GetxController {
   @override
   void onClose() {
     super.onClose();
-    if (QrMerchantDetails.useMqtt) {
+
+    if (TLocalStorage().readData('useMqtt') == 'Y') {
       if (client.connectionStatus!.state == MqttConnectionState.connected) {
-        print("🔌 Disconnecting MQTT client...");
+        if (kDebugMode) {
+          print("🔌 Disconnecting MQTT client...");
+        }
         client.disconnect();
         isConnected.value = false;
       }

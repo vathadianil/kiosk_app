@@ -1,33 +1,22 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:kiosk_app/utils/local_storage/storage_utility.dart';
 import 'package:kiosk_app/services/log_service.dart ';
 
-class ApiConfig {
-  final String isProd = TLocalStorage().readData('isProd');
-
-  static String get baseUrl {
-    String isProd = TLocalStorage().readData('isProd');
-    return isProd == 'Y'
-        ? 'https://prodapi.afc-transit.com'
-        : 'https://uatapi.afc-transit.com';
-  }
-}
-
 class THttpHelper {
-  var apiConfig = ApiConfig();
-
-  static final String _baseUrl = ApiConfig.baseUrl;
+  static const String _baseUrl = 'https://uatapi.afc-transit.com'; //UAT
+  // static const String _baseUrl ='https://prodapi.afc-transit.com' //PROD
 
   // Helper method to make a GET request
   static Future<Map<String, dynamic>> get(String endpoint) async {
     final logger = LogService().logger;
     final response = await http.get(Uri.parse('$_baseUrl/$endpoint'));
     if (kDebugMode) {
-      logger.i('url : $_baseUrl/$endpoint');
-      logger.i('response: ${response.body}');
+      print('url : $_baseUrl/$endpoint');
+      print('response: ${response.body}');
     }
+    logger.i('url : $_baseUrl/$endpoint');
+    logger.i('response: ${response.body}');
     return _handleResponse(response);
   }
 
@@ -41,10 +30,13 @@ class THttpHelper {
       body: json.encode(data),
     );
     if (kDebugMode) {
-      logger.i('url : $_baseUrl/$endpoint');
-      logger.i('payload : $data');
-      logger.i('response: ${response.body}');
+      print('url : $_baseUrl/$endpoint');
+      print('payload : $data');
+      print('response: ${response.body}');
     }
+    logger.i('url : $_baseUrl/$endpoint');
+    logger.i('payload : $data');
+    logger.i('response: ${response.body}');
     return _handleResponse(response);
   }
 

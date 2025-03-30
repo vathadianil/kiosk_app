@@ -1,19 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kiosk_app/features/book-qr/controller/station_list_controller.dart';
 import 'package:kiosk_app/features/home/home.dart';
+import 'package:kiosk_app/utils/helpers/helper_functions.dart';
 import 'package:kiosk_app/utils/local_storage/storage_utility.dart';
 import 'package:kiosk_app/utils/popups/loaders.dart';
 
 class ConfigControoler extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
-  RxString stationId = ''.obs;
+  final mobileController = TextEditingController();
+  final terminalController = TextEditingController();
   RxString stationName = ''.obs;
-  RxString equipmentId = ''.obs;
-  RxString mobileNumber = ''.obs;
-  RxString terminalId = ''.obs;
-  RxString isProd = 'Y'.obs;
+  RxString equipmentId = '0001'.obs;
   RxString useMqtt = 'Y'.obs;
+
+  @override
+  onInit() {
+    super.onInit();
+    initForm();
+  }
+
+  initForm() {
+    stationName.value = TLocalStorage().readData('sourceStationName') ?? '';
+    equipmentId.value =
+        TLocalStorage().readData('displayEquipmentId') ?? '0001';
+    terminalController.text = TLocalStorage().readData('terminalId') ?? '';
+    mobileController.text = TLocalStorage().readData('mobileNo') ?? '';
+    useMqtt.value = TLocalStorage().readData('useMqtt') ?? 'Y';
+  }
+
   submitDetails() {
     //Form Validation
     if (!formKey.currentState!.validate()) {
@@ -22,14 +37,25 @@ class ConfigControoler extends GetxController {
       return;
     }
 
-    TLocalStorage().saveData('sourceStationId', stationId.value);
+    final staitonShortName = THelperFunctions.getStationFromStationName(
+                stationName.value, StationListController.instance.stationList)
+            .shortName ??
+        '';
+    final stationId = THelperFunctions.getStationFromStationName(
+                stationName.value, StationListController.instance.stationList)
+            .stationId ??
+        '';
+
+    TLocalStorage().saveData('sourceStationId', stationId);
     TLocalStorage().saveData('sourceStationName', stationName.value);
-    TLocalStorage().saveData('equipmentId', equipmentId.value);
-    TLocalStorage().saveData('mobileNo', mobileNumber.value);
-    TLocalStorage().saveData('terminalId', terminalId.value);
-    TLocalStorage().saveData('isProd', isProd.value);
+    TLocalStorage().saveData('displayEquipmentId', equipmentId.value);
     TLocalStorage()
-        .saveData('userId', '${stationId.value}${mobileNumber.value}');
+        .saveData('equipmentId', '${staitonShortName}KSK${equipmentId.value}');
+    TLocalStorage().saveData('mobileNo', mobileController.text);
+    TLocalStorage().saveData('terminalId', terminalController.text);
+    TLocalStorage().saveData('useMqtt', useMqtt.value);
+    TLocalStorage()
+        .saveData('userId', '${staitonShortName}KSK${equipmentId.value}');
 
     Get.offAll(() => const HomeScreen());
   }

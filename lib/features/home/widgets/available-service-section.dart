@@ -9,7 +9,9 @@ import 'package:kiosk_app/common/widgets/containers/t_glass_container.dart';
 import 'package:kiosk_app/features/book-qr/book-qr-screen.dart';
 import 'package:kiosk_app/features/home/controllers/setting_controller.dart';
 import 'package:kiosk_app/utils/constants/colors.dart';
+import 'package:kiosk_app/utils/constants/image_strings.dart';
 import 'package:kiosk_app/utils/device/device_utility.dart';
+import 'package:lottie/lottie.dart';
 
 class AvailableServiceSection extends StatelessWidget {
   const AvailableServiceSection({
@@ -42,9 +44,16 @@ class AvailableServiceSection extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              LottieBuilder.asset(
+                TImages.ticket,
+                width: screenWidth * .2,
+              ),
+              SizedBox(
+                height: screenWidth * .02,
+              ),
               Text(
                 'Tap the button below to book your ticket',
-                style: Theme.of(context).textTheme.labelSmall,
+                style: Theme.of(context).textTheme.labelLarge,
                 textAlign: TextAlign.center,
               ),
               SizedBox(
