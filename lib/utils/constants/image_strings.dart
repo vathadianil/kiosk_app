@@ -22,6 +22,7 @@ class TImages {
       "assets/images/animations/trainAnimation.json";
   static const String location = "assets/images/animations/location.json";
   static const String ticket = "assets/images/animations/ticket.json";
+  static const String queue = "assets/images/animations/queue.json";
 
 //-- Icons
   static const String phonepe = "assets/icons/payment_methods/phonepe.png";

@@ -40,8 +40,9 @@ class PaymentTimerController extends GetxController {
       if (secondsElapsed.value > 0) {
         secondsElapsed.value--;
         if (secondsElapsed.value <
-                (TimerConstants.paymentWaitTimer / 2).ceil() &&
+                (TimerConstants.paymentWaitTimer / 2).round() &&
             TLocalStorage().readData('useMqtt') == 'Y' &&
+            TLocalStorage().readData('swtichToApiPolling') == 'Y' &&
             !GenerateTicketController.instance.isDataFound.value) {
           if (!GenerateTicketController.instance.isApiPoolingStarted) {
             GenerateTicketController.instance.isApiPoolingStarted = true;

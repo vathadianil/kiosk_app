@@ -2,20 +2,22 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:kiosk_app/services/log_service.dart ';
+import 'package:kiosk_app/utils/constants/qr_merchant_id.dart';
 
 class THttpHelper {
-  static const String _baseUrl = 'https://uatapi.afc-transit.com'; //UAT
-  // static const String _baseUrl ='https://prodapi.afc-transit.com' //PROD
+  static const String _baseUrl = QrMerchantDetails.isProd
+      ? 'https://prodapi.afc-transit.com' //PROD
+      : 'https://uatapi.afc-transit.com'; //UAT
 
   // Helper method to make a GET request
   static Future<Map<String, dynamic>> get(String endpoint) async {
     final logger = LogService().logger;
+    logger.i('url : $_baseUrl/$endpoint');
     final response = await http.get(Uri.parse('$_baseUrl/$endpoint'));
     if (kDebugMode) {
       print('url : $_baseUrl/$endpoint');
       print('response: ${response.body}');
     }
-    logger.i('url : $_baseUrl/$endpoint');
     logger.i('response: ${response.body}');
     return _handleResponse(response);
   }
@@ -24,6 +26,10 @@ class THttpHelper {
   static Future<Map<String, dynamic>> post(
       String endpoint, dynamic data) async {
     final logger = LogService().logger;
+    logger.i('''
+                url : $_baseUrl/$endpoint 
+                payload : $data
+                ''');
     final response = await http.post(
       Uri.parse('$_baseUrl/$endpoint'),
       headers: {'Content-Type': 'application/json'},
@@ -34,14 +40,17 @@ class THttpHelper {
       print('payload : $data');
       print('response: ${response.body}');
     }
-    logger.i('url : $_baseUrl/$endpoint');
-    logger.i('payload : $data');
     logger.i('response: ${response.body}');
     return _handleResponse(response);
   }
 
   // Helper method to make a PUT request
   static Future<Map<String, dynamic>> put(String endpoint, dynamic data) async {
+    final logger = LogService().logger;
+    logger.i('''
+                url : $_baseUrl/$endpoint 
+                payload : $data
+                ''');
     final response = await http.put(
       Uri.parse('$_baseUrl/$endpoint'),
       headers: {'Content-Type': 'application/json'},
@@ -52,15 +61,19 @@ class THttpHelper {
       print('payload : $data');
       print('response: ${response.body}');
     }
+    logger.i('response: ${response.body}');
     return _handleResponse(response);
   }
 
   // Helper method to make a DELETE request
   static Future<Map<String, dynamic>> delete(String endpoint) async {
+    final logger = LogService().logger;
+    logger.i('url : $_baseUrl/$endpoint ');
     final response = await http.delete(Uri.parse('$_baseUrl/$endpoint'));
     if (kDebugMode) {
       print(response.body);
     }
+    logger.i('response: ${response.body}');
     return _handleResponse(response);
   }
 
@@ -77,3 +90,5 @@ class THttpHelper {
     }
   }
 }
+
+mixin isProd {}

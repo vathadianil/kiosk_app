@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:kiosk_app/common/widgets/layout/t_background_gradient.dart';
 import 'package:kiosk_app/features/book-qr/models/create_spos_order.dart';

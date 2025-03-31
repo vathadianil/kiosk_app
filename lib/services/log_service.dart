@@ -35,10 +35,11 @@ class LogService {
       printer: PrettyPrinter(
         methodCount: 0, // No method details
         errorMethodCount: 8,
+        dateTimeFormat: DateTimeFormat.dateAndTime,
         lineLength: 100,
         colors: false, // Disable colors for file writing
-        printEmojis: true,
-        printTime: true, // Adds time to logs
+        printEmojis: false,
+        noBoxingByDefault: true,
       ),
       output: FileOutput(() async => Future.value(_logFile)),
     );
@@ -70,7 +71,7 @@ class LogService {
 
     if (_currentDate != formattedDate) {
       _currentDate = formattedDate;
-      String logPath = '${directory.path}/app_logs_$_currentDate.txt';
+      String logPath = '${directory.path}/kiosk_log_$_currentDate.txt';
       _logFile = File(logPath);
 
       // Create the file if it doesn't exist

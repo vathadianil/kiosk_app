@@ -19,6 +19,7 @@ class CustomDropdown extends StatelessWidget {
   final bool enabled;
   final EdgeInsetsGeometry? contentPadding;
   final bool isDense;
+  final String helperText;
 
   const CustomDropdown({
     super.key,
@@ -36,6 +37,7 @@ class CustomDropdown extends StatelessWidget {
     this.enabled = true,
     this.contentPadding,
     this.isDense = false,
+    this.helperText = '',
   });
 
   @override
@@ -51,7 +53,9 @@ class CustomDropdown extends StatelessWidget {
             : TColors.grey;
 
     return DropdownButtonFormField<String>(
+      dropdownColor: TColors.primary,
       decoration: InputDecoration(
+        helperText: helperText,
         label: Text(
           labelText,
           textScaler: textScaler,

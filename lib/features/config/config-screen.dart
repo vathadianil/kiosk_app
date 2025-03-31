@@ -31,97 +31,164 @@ class ConfigScreen extends StatelessWidget {
                 left: TSizes.defaultSpace,
                 right: TSizes.defaultSpace,
               ),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Image.asset(
-                        TImages.appLogo,
-                        width: screenWidth * .15,
-                      ),
-                      SizedBox(
-                        width: screenWidth * .05,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Welcome',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineSmall!
-                                .copyWith(color: TColors.white),
-                          ),
-                          Text(
-                            'Easy Ticket booking for metro rides',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall!
-                                .copyWith(color: TColors.white),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: TSizes.spaceBtwSections * 2,
-                  ),
-                  SizedBox(
-                    width: screenWidth * .5,
-                    child: Form(
-                      key: controller.formKey,
-                      child: Column(
-                        children: [
-                          Obx(
-                            () => TDropdown(
-                              value: controller.stationName.value != ''
-                                  ? THelperFunctions.getStationFromStationName(
-                                              controller.stationName.value,
-                                              stationListController.stationList)
-                                          .name ??
-                                      ''
-                                  : '',
-                              items: stationListController.stationList
-                                  .map((item) => item.name!)
-                                  .toList()
-                                ..sort(),
-                              labelText: 'Source Station Name',
-                              labelColor: TColors.white,
-                              onChanged: (value) {
-                                if (value != '') {
-                                  controller.stationName.value = value!;
-                                }
-                              },
+              child: Obx(
+                () => Column(
+                  children: [
+                    Row(
+                      children: [
+                        Image.asset(
+                          TImages.appLogo,
+                          width: screenWidth * .15,
+                        ),
+                        SizedBox(
+                          width: screenWidth * .05,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Welcome',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineSmall!
+                                  .copyWith(color: TColors.white),
                             ),
-                          ),
-                          const SizedBox(height: TSizes.spaceBtwSections),
-                          Obx(
-                            () => CustomDropdown(
-                              labelText: 'Equipment Id',
-                              value: controller.equipmentId.value,
+                            Text(
+                              'Easy Ticket booking for metro rides',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall!
+                                  .copyWith(color: TColors.white),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: TSizes.spaceBtwSections * 2,
+                    ),
+                    SizedBox(
+                      width: screenWidth * .5,
+                      child: Form(
+                        key: controller.formKey,
+                        child: Column(
+                          children: [
+                            Obx(
+                              () => TDropdown(
+                                value: controller.stationName.value != ''
+                                    ? THelperFunctions
+                                                .getStationFromStationName(
+                                                    controller
+                                                        .stationName.value,
+                                                    stationListController
+                                                        .stationList)
+                                            .name ??
+                                        ''
+                                    : '',
+                                items: stationListController.stationList
+                                    .map((item) => item.name!)
+                                    .toList()
+                                  ..sort(),
+                                labelText: 'Source Station Name',
+                                labelColor: TColors.white,
+                                onChanged: (value) {
+                                  if (value != '') {
+                                    controller.stationName.value = value!;
+                                  }
+                                },
+                              ),
+                            ),
+                            const SizedBox(height: TSizes.spaceBtwSections),
+                            Obx(
+                              () => CustomDropdown(
+                                labelText: 'Equipment Id',
+                                value: controller.equipmentId.value,
+                                items: const [
+                                  DropdownMenuItem(
+                                    value: "0001",
+                                    child: Text(
+                                      "0001",
+                                    ),
+                                  ),
+                                  DropdownMenuItem(
+                                    value: "0002",
+                                    child: Text(
+                                      "0002",
+                                    ),
+                                  ),
+                                  DropdownMenuItem(
+                                    value: "0011",
+                                    child: Text(
+                                      "0011",
+                                    ),
+                                  ),
+                                  DropdownMenuItem(
+                                    value: "0012",
+                                    child: Text(
+                                      "0012",
+                                    ),
+                                  ),
+                                ],
+                                contentPadding: EdgeInsets.symmetric(
+                                  vertical: screenWidth * .013,
+                                  horizontal: screenWidth * .04,
+                                ),
+
+                                onChanged: (value) {
+                                  if (value != '') {
+                                    controller.equipmentId.value = value!;
+                                  }
+                                }, // Set to null when not editable
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please Select Field';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                            const SizedBox(height: TSizes.spaceBtwSections),
+                            TextFormField(
+                              keyboardType: TextInputType.number,
+                              controller: controller.mobileController,
+                              onChanged: (value) =>
+                                  controller.mobileController.text = value,
+                              decoration: InputDecoration(
+                                label: Text(
+                                  "Mobile Number",
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: TSizes.spaceBtwSections),
+                            TextFormField(
+                              keyboardType: TextInputType.number,
+                              controller: controller.terminalController,
+                              onChanged: (value) =>
+                                  controller.terminalController.text = value,
+                              decoration: InputDecoration(
+                                label: Text(
+                                  "Terminal Id",
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: TSizes.spaceBtwSections),
+                            CustomDropdown(
+                              labelText: 'Enable Mqtt',
+                              value: controller.useMqtt.value,
+                              helperText: 'Yes -> Mqtt      No -> Api Polling',
                               items: const [
                                 DropdownMenuItem(
-                                  value: "0001",
+                                  value: "Y",
                                   child: Text(
-                                    "0001",
+                                    "Yes",
                                   ),
                                 ),
                                 DropdownMenuItem(
-                                  value: "0002",
+                                  value: "N",
                                   child: Text(
-                                    "0002",
-                                  ),
-                                ),
-                                DropdownMenuItem(
-                                  value: "0011",
-                                  child: Text(
-                                    "0011",
-                                  ),
-                                ),
-                                DropdownMenuItem(
-                                  value: "0012",
-                                  child: Text(
-                                    "0012",
+                                    "No",
                                   ),
                                 ),
                               ],
@@ -132,7 +199,7 @@ class ConfigScreen extends StatelessWidget {
 
                               onChanged: (value) {
                                 if (value != '') {
-                                  controller.equipmentId.value = value!;
+                                  controller.useMqtt.value = value!;
                                 }
                               }, // Set to null when not editable
                               validator: (value) {
@@ -142,80 +209,58 @@ class ConfigScreen extends StatelessWidget {
                                 return null;
                               },
                             ),
-                          ),
-                          const SizedBox(height: TSizes.spaceBtwSections),
-                          TextFormField(
-                            keyboardType: TextInputType.number,
-                            controller: controller.mobileController,
-                            onChanged: (value) =>
-                                controller.mobileController.text = value,
-                            decoration: InputDecoration(
-                              label: Text(
-                                "Mobile Number",
-                                style: Theme.of(context).textTheme.bodyMedium,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: TSizes.spaceBtwSections),
-                          TextFormField(
-                            keyboardType: TextInputType.number,
-                            controller: controller.terminalController,
-                            onChanged: (value) =>
-                                controller.terminalController.text = value,
-                            decoration: InputDecoration(
-                              label: Text(
-                                "Terminal Id",
-                                style: Theme.of(context).textTheme.bodyMedium,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: TSizes.spaceBtwSections),
-                          CustomDropdown(
-                            labelText: 'Enable Mqtt',
-                            value: controller.useMqtt.value,
-                            items: const [
-                              DropdownMenuItem(
-                                value: "Y",
-                                child: Text(
-                                  "Yes",
+                            const SizedBox(height: TSizes.spaceBtwSections),
+                            if (controller.useMqtt.value == 'Y')
+                              CustomDropdown(
+                                labelText: 'Swith to Api Polling',
+                                value: controller.swtichToApiPolling.value,
+                                helperText:
+                                    'Yes -> Switches to Api polling after 90 seconds',
+                                items: const [
+                                  DropdownMenuItem(
+                                    value: "Y",
+                                    child: Text(
+                                      "Yes",
+                                    ),
+                                  ),
+                                  DropdownMenuItem(
+                                    value: "N",
+                                    child: Text(
+                                      "No",
+                                    ),
+                                  ),
+                                ],
+                                contentPadding: EdgeInsets.symmetric(
+                                  vertical: screenWidth * .013,
+                                  horizontal: screenWidth * .04,
                                 ),
-                              ),
-                              DropdownMenuItem(
-                                value: "N",
-                                child: Text(
-                                  "No",
-                                ),
-                              ),
-                            ],
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: screenWidth * .013,
-                              horizontal: screenWidth * .04,
-                            ),
 
-                            onChanged: (value) {
-                              if (value != '') {
-                                controller.useMqtt.value = value!;
-                              }
-                            }, // Set to null when not editable
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please Select Field';
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: TSizes.spaceBtwSections * 2),
-                          TNeomarphismBtn(
-                            onPressed: () {
-                              controller.submitDetails();
-                            },
-                            child: const Text('Submit'),
-                          ),
-                        ],
+                                onChanged: (value) {
+                                  if (value != '') {
+                                    controller.swtichToApiPolling.value =
+                                        value!;
+                                  }
+                                }, // Set to null when not editable
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please Select Field';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            const SizedBox(height: TSizes.spaceBtwSections * 2),
+                            TNeomarphismBtn(
+                              onPressed: () {
+                                controller.submitDetails();
+                              },
+                              child: const Text('Submit'),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

@@ -6,8 +6,10 @@ import 'package:kiosk_app/features/book-qr/widgets/payment_processing_screen.dar
 import 'package:kiosk_app/features/display-qr/display-qr-screen.dart';
 import 'package:kiosk_app/features/payment-qr/models/payment-confim-model.dart';
 import 'package:kiosk_app/repositories/book-qr/book-qr-repository.dart';
+import 'package:kiosk_app/services/log_service.dart';
 import 'package:kiosk_app/utils/constants/qr_merchant_id.dart';
 import 'package:kiosk_app/utils/local_storage/storage_utility.dart';
+import 'package:logger/logger.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'dart:async';
@@ -36,12 +38,17 @@ class GenerateTicketController extends GetxController {
   var isApiPoolingStarted = false;
 
   late MqttServerClient client;
-  String brokerUrl = "mqtt.afc-transit.com"; // Your MQTT broker URL
-  int port = 8883; // Use 8883 for secure connection (SSL/TLS)
+  // String brokerUrl = "mqtt.afc-transit.com";
+  String brokerUrl = "13.232.228.164";
+  int port = 1883;
+  // int port = 8883; // Use 8883 for secure connection (SSL/TLS)
   String clientId = TLocalStorage().readData('equipmentId');
+  late Logger logger;
 
   @override
-  void onInit() {
+  void onInit() async {
+    await LogService().init();
+    logger = LogService().logger;
     super.onInit();
     if (TLocalStorage().readData('useMqtt') == 'Y') {
       connectToMqtt(createOrderData.orderId ?? '');
@@ -57,6 +64,7 @@ class GenerateTicketController extends GetxController {
           print("🔌 Disconnecting MQTT client...");
         }
         client.disconnect();
+        logger.i("🔌 Disconnecting MQTT client...");
         isConnected.value = false;
       }
     }
@@ -69,7 +77,7 @@ class GenerateTicketController extends GetxController {
       brokerUrl,
       clientId,
     );
-    client.secure = true;
+    client.secure = false;
     client.port = port;
 
     // Set Keep Alive Interval
@@ -83,7 +91,7 @@ class GenerateTicketController extends GetxController {
         .withClientIdentifier(
           clientId,
         )
-        .authenticateAs('kskuatmqtt', 'kskmqtt@312')
+        // .authenticateAs('kskuatmqtt', 'kskmqtt@312')
         .startClean() // Start with a clean session
         .withWillQos(MqttQos.atMostOnce);
 
@@ -93,11 +101,13 @@ class GenerateTicketController extends GetxController {
       if (kDebugMode) {
         print("🔌 Connecting to MQTT...");
       }
+      logger.i("🔌 Connecting to MQTT...");
       await client.connect();
       if (client.connectionStatus!.state == MqttConnectionState.connected) {
         if (kDebugMode) {
           print("✅ Connected to MQTT broker");
         }
+        logger.i("✅ Connected to MQTT broker");
         isConnected.value = true;
         subscribeToTopic(orderId);
       } else {
@@ -105,12 +115,15 @@ class GenerateTicketController extends GetxController {
           print(
               "❌ Failed to connect to MQTT. Status: ${client.connectionStatus}");
         }
+        logger.i(
+            "❌ Failed to connect to MQTT. Status: ${client.connectionStatus}");
         isConnected.value = false;
       }
     } catch (e) {
       if (kDebugMode) {
         print("❌ MQTT Connection Error: $e");
       }
+      logger.i("❌ MQTT Connection Error: $e");
       isConnected.value = false;
       reconnectMqtt(); // Try to reconnect if connection fails
     }
@@ -123,6 +136,7 @@ class GenerateTicketController extends GetxController {
         if (kDebugMode) {
           print("🔄 Attempting to reconnect...");
         }
+        logger.i("🔄 Attempting to reconnect...");
         connectToMqtt(createOrderData.orderId ?? '');
       }
     });
@@ -133,6 +147,7 @@ class GenerateTicketController extends GetxController {
     if (kDebugMode) {
       print("✅ MQTT Connection Established.");
     }
+    logger.i("✅ MQTT Connection Established.");
     isConnected.value = true;
   }
 
@@ -149,6 +164,7 @@ class GenerateTicketController extends GetxController {
     if (kDebugMode) {
       print("📡 Subscribed to topic: $topic");
     }
+    logger.i("📡 Subscribed to topic: $topic");
 
     // Listen for incoming messages
     client.updates!.listen((List<MqttReceivedMessage<MqttMessage>> messages) {
@@ -157,10 +173,11 @@ class GenerateTicketController extends GetxController {
       final String payload =
           MqttPublishPayload.bytesToStringAsString(message.payload.message);
 
+      logger.i("✅ Received Data From Mqtt: $payload");
       // Process Payment Status
       final data = jsonDecode(payload);
       final confirmOrderData = PaymentConfirmModel.fromJson(data);
-      if (confirmOrderData.orderId == orderId) {
+      if (confirmOrderData.orderId == orderId && !isDataFound.value) {
         if (confirmOrderData.paymentStatus == "SUCCESS") {
           isDataFound.value = true;
           generateTicket(confirmOrderData);
@@ -189,6 +206,7 @@ class GenerateTicketController extends GetxController {
     if (kDebugMode) {
       print('✅ Polling stopped. Data found.');
     }
+    logger.i('✅ Polling stopped. Data found.');
   }
 
   /// Fetch data from API
@@ -203,6 +221,7 @@ class GenerateTicketController extends GetxController {
         if (kDebugMode) {
           print('❌ No data Found');
         }
+        logger.i('❌ No data Found');
       } else if (paymentData.paymentStatus == 'FAILED' ||
           paymentData.paymentStatus == 'USER_DROPPED') {
         isDataFound.value = true;
@@ -213,6 +232,7 @@ class GenerateTicketController extends GetxController {
       if (kDebugMode) {
         print('❗ Error fetching data: $e');
       }
+      logger.i('❗ Error fetching data: $e');
     }
   }
 
