@@ -70,6 +70,7 @@ flutter:
     - .env
     - assets/logos/
     - assets/icons/brands/
+    - assets/icons/payment_methods/
     - assets/images/content/
     - assets/images/animations/
 

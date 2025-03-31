@@ -31,7 +31,7 @@ class PaymentQrDisplaySection extends StatelessWidget {
             TimerController.instance.resetTimer();
           },
           width: screenWidth * .5,
-          height: screenWidth * .6,
+          height: screenWidth * .65,
           borderRadius: screenWidth * .05,
           child: Center(
               child: Column(
@@ -50,7 +50,11 @@ class PaymentQrDisplaySection extends StatelessWidget {
                 ],
               ),
               SizedBox(
-                height: screenWidth * .05,
+                height: screenWidth * .03,
+              ),
+              const Text('Scan to Pay'),
+              SizedBox(
+                height: screenWidth * .02,
               ),
               if (createTerminalTrxData.qrcode != null)
                 ClipRRect(
@@ -64,11 +68,34 @@ class PaymentQrDisplaySection extends StatelessWidget {
                   ),
                 ),
               SizedBox(
-                height: screenWidth * .02,
-              ),
-              const Text('Scan to Pay'),
-              SizedBox(
                 height: screenWidth * .01,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Pay using UPI enabled apps like',
+                    style: Theme.of(context).textTheme.labelSmall,
+                  ),
+                  SizedBox(width: screenWidth * .01),
+                  Image.asset(
+                    TImages.phonepe,
+                    width: 24,
+                  ),
+                  SizedBox(width: screenWidth * .01),
+                  Image.asset(
+                    TImages.gpay,
+                    width: 24,
+                  ),
+                  SizedBox(width: screenWidth * .01),
+                  Image.asset(
+                    TImages.paytm,
+                    width: 24,
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: screenWidth * .03,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

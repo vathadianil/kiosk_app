@@ -24,13 +24,9 @@ class TImages {
   static const String ticket = "assets/images/animations/ticket.json";
 
 //-- Icons
-  static const String whatsApp = "assets/images/content/whatsapp.png";
-  static const String interChangeIcon = "assets/icons/interchange.png";
-  static const String facebook = "assets/icons/facebook.svg";
-  static const String instagram = "assets/icons/instagram.svg";
-  static const String twitter = "assets/icons/twitter.svg";
-  static const String youtube = "assets/icons/youtube.svg";
-  static const String linkedin = "assets/icons/linkedin.svg";
+  static const String phonepe = "assets/icons/payment_methods/phonepe.png";
+  static const String gpay = "assets/icons/payment_methods/gpay.png";
+  static const String paytm = "assets/icons/payment_methods/paytm.png";
 
   //--Metro Map
   static const String networkMapJpg =
