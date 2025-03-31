@@ -60,7 +60,7 @@ class PaymentProcessingScreen extends StatelessWidget {
                       children: [
                         TGlassContainer(
                           width: screenWidth * .6,
-                          height: screenHeight * .6,
+                          height: screenHeight * .7,
                           child: Padding(
                             padding: EdgeInsets.all(screenWidth * .05),
                             child: Obx(

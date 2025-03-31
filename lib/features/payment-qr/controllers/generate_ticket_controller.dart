@@ -259,6 +259,11 @@ class GenerateTicketController extends GetxController {
             amountPaid: createOrderData.orderAmount ?? '',
             pgResponse: createOrderData,
             confirmOrderData: confirmOrderData));
+      } else {
+        gotoPaymentProcessingScreen(
+          confirmOrderData: confirmOrderData,
+          retryPurchase: true,
+        );
       }
     } catch (e) {
       gotoPaymentProcessingScreen(

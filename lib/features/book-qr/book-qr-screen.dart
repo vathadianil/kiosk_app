@@ -51,83 +51,81 @@ class BookQrScreen extends StatelessWidget {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Obx(
-            () => Column(
-              children: [
-                stationController.isLoading.value
-                    ? ShimmerEffect(
-                        width: screenWidth * .3,
-                        height: 50,
-                        color: TColors.grey,
-                      )
-                    : Padding(
-                        padding: const EdgeInsets.only(
-                          right: TSizes.defaultSpace,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            SizedBox(
-                              width: screenWidth * .3,
-                              child: TDropdown(
-                                value: bookQrController.destination.value != ''
-                                    ? THelperFunctions.getStationFromStationId(
-                                                bookQrController
-                                                    .destination.value,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                  right: TSizes.defaultSpace,
+                ),
+                child: Obx(
+                  () => Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      if (stationController.isLoading.value)
+                        ShimmerEffect(
+                          width: screenWidth * .3,
+                          height: 50,
+                          color: TColors.grey,
+                        )
+                      else
+                        SizedBox(
+                          width: screenWidth * .3,
+                          child: TDropdown(
+                            value: bookQrController.destination.value != ''
+                                ? THelperFunctions.getStationFromStationId(
+                                            bookQrController.destination.value,
+                                            stationController.stationList)
+                                        .name ??
+                                    ''
+                                : '',
+                            items: stationController.stationList
+                                .map((item) => item.name!)
+                                .toList()
+                              ..sort(),
+                            labelText: 'Select Your Destination',
+                            onChanged: (value) {
+                              if (value != '') {
+                                final stationId =
+                                    THelperFunctions.getStationFromStationName(
+                                                value!,
                                                 stationController.stationList)
-                                            .name ??
-                                        ''
-                                    : '',
-                                items: stationController.stationList
-                                    .map((item) => item.name!)
-                                    .toList()
-                                  ..sort(),
-                                labelText: 'Select Your Destination',
-                                onChanged: (value) {
-                                  if (value != '') {
-                                    final stationId = THelperFunctions
-                                                .getStationFromStationName(
-                                                    value!,
-                                                    stationController
-                                                        .stationList)
                                             .stationId ??
                                         '';
-                                    bookQrController.destination.value =
-                                        stationId;
-                                    showModalBottomSheet(
-                                      showDragHandle: false,
-                                      isScrollControlled: true,
-                                      context: context,
-                                      builder: (context) => const Wrap(
-                                        children: [
-                                          BookQrBottomSheet(),
-                                        ],
-                                      ),
-                                    );
-                                    bookQrController.getFare();
-                                  }
-                                },
-                              ),
-                            ),
-                          ],
+                                bookQrController.destination.value = stationId;
+                                showModalBottomSheet(
+                                  showDragHandle: false,
+                                  isScrollControlled: true,
+                                  context: context,
+                                  builder: (context) => const Wrap(
+                                    children: [
+                                      BookQrBottomSheet(),
+                                    ],
+                                  ),
+                                );
+                                bookQrController.getFare();
+                              }
+                            },
+                          ),
                         ),
-                      ),
-                Center(
-                  child: SizedBox(
-                    width: screenWidth * .9,
-                    height: screenWidth * .9,
-                    child: const MapWidget(),
+                    ],
                   ),
                 ),
-                Hero(
-                  tag: 'img',
-                  child: HomeCarousel(
-                    applyBoxShadow: true,
-                    boxShadowColor: TColors.accent.withOpacity(.2),
-                  ),
+              ),
+              Center(
+                child: SizedBox(
+                  width: screenWidth * .9,
+                  height: screenWidth * .9,
+                  child: const MapWidget(),
                 ),
-              ],
-            ),
+              ),
+              Hero(
+                tag: 'img',
+                child: HomeCarousel(
+                  applyBoxShadow: true,
+                  boxShadowColor: TColors.accent.withOpacity(.2),
+                ),
+              ),
+            ],
           ),
         ),
       ),

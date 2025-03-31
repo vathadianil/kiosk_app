@@ -115,47 +115,55 @@ class PaymentProcessingController extends GetxController {
                 confirmOrderData: confirmOrderData,
               ));
         } else {
-          // final mobileNumber = TLocalStorage().readData('mobileNo');
-          // final refundOrderResponse =
-          //     await cashFreePaymentController.createRefundOrder(
-          //   verifyPaymentData.orderId!,
-          //   verifyPaymentData.orderAmount!,
-          //   mobileNumber,
-          //   int.parse(requestPayload['noOfTickets'].toString()),
-          //   '',
-          // );
-          // if (refundOrderResponse.cfPaymentId != null &&
-          //     refundOrderResponse.cfRefundId != null) {
-          //   final getRefundStatus =
-          //       await cashFreePaymentController.getRefundStatus(
-          //           verifyPaymentData.orderId!, refundOrderResponse.refundId!);
-          //   if (getRefundStatus.refundStatus == 'SUCCESS') {
-          //   } else if (getRefundStatus.refundStatus == 'PENDING') {
-          //     final payload = {
-          //       "token": "$token",
-          //       "merchantOrderId": verifyPaymentData.orderId,
-          //       "merchantId": dotenv.env["TSAVAARI_MERCHANT_SHORT_ID"],
-          //       "ticketTypeId": requestPayload['ticketTypeId'],
-          //       "noOfTickets": requestPayload['noOfTickets'],
-          //       "merchantTotalFareAfterGst":
-          //           requestPayload['merchantTotalFareAfterGst'],
-          //       "travelDateTime": requestPayload['travelDateTime'],
-          //       "patronPhoneNumber":
-          //           await TLocalStorage().readData('mobileNo') ?? ''
-          //     };
-          //     final response =
-          //         await bookQrRepository.paymentRefundIntimation(payload);
-          //     if (response.returnCode == '0') {
-          //       isGenerateTicketError.value = true;
-          //     } else {
-          //       throw 'Something went wrong!';
-          //     }
-          //   }
-          // }
+          refundOrder();
         }
       } catch (e) {
-        rethrow;
+        refundOrder();
       }
     });
+  }
+
+  refundOrder() async {
+    try {
+      final token = await TLocalStorage().readData('token');
+      final mobileNumber = TLocalStorage().readData('mobileNo');
+      final refundOrderResponse =
+          await cashFreePaymentController.createRefundOrder(
+        verifyPaymentData.orderId!,
+        verifyPaymentData.orderAmount!,
+        mobileNumber,
+        int.parse(requestPayload['noOfTickets'].toString()),
+        '',
+      );
+      if (refundOrderResponse.cfPaymentId != null &&
+          refundOrderResponse.cfRefundId != null) {
+        final getRefundStatus = await cashFreePaymentController.getRefundStatus(
+            verifyPaymentData.orderId!, refundOrderResponse.refundId!);
+        if (getRefundStatus.refundStatus == 'SUCCESS') {
+        } else if (getRefundStatus.refundStatus == 'PENDING') {
+          final payload = {
+            "token": "$token",
+            "merchantOrderId": verifyPaymentData.orderId,
+            "merchantId": dotenv.env["TSAVAARI_MERCHANT_SHORT_ID"],
+            "ticketTypeId": requestPayload['ticketTypeId'],
+            "noOfTickets": requestPayload['noOfTickets'],
+            "merchantTotalFareAfterGst":
+                requestPayload['merchantTotalFareAfterGst'],
+            "travelDateTime": requestPayload['travelDateTime'],
+            "patronPhoneNumber":
+                await TLocalStorage().readData('mobileNo') ?? ''
+          };
+          final response =
+              await bookQrRepository.paymentRefundIntimation(payload);
+          if (response.returnCode == '0') {
+            isGenerateTicketError.value = true;
+          } else {
+            throw 'Something went wrong!';
+          }
+        }
+      }
+    } catch (e) {
+      rethrow;
+    }
   }
 }
