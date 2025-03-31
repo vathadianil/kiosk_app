@@ -78,6 +78,55 @@ class THelperFunctions {
     );
   }
 
+  static void showPaymentCancelAlert(
+      String title, String message, Function callbackFun,
+      {dismisable = false}) {
+    showDialog(
+      context: Get.context!,
+      barrierDismissible: dismisable,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: TColors.primary,
+          title: Text(
+            title,
+            style: Theme.of(context)
+                .textTheme
+                .headlineMedium!
+                .copyWith(color: TColors.white),
+          ),
+          content: SizedBox(width: screenWidth() * .5, child: Text(message)),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'No',
+                style: Theme.of(context)
+                    .textTheme
+                    .labelLarge!
+                    .copyWith(color: TColors.white),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                callbackFun();
+              },
+              child: Text(
+                'Yes',
+                style: Theme.of(context)
+                    .textTheme
+                    .labelLarge!
+                    .copyWith(color: TColors.white),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   static String getCurrentDateTime() {
     DateTime now = DateTime.now();
     return DateFormat('dd-MM-yyyy HH:mm:ss').format(now);

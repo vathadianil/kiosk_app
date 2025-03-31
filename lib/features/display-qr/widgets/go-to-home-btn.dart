@@ -28,6 +28,7 @@ class GotoHomeBtn extends StatelessWidget {
       onPressed: () async {
         if (!checkSubmittedStutus ||
             displayQrController.isPrintSubmitted.value) {
+          TimerController.instance.resetTimer();
           TimerController.instance.resumeTimer();
           Get.offAll(() => const HomeScreen());
         } else {

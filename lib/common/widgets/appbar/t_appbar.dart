@@ -3,10 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:kiosk_app/common/controllers/timer-controller.dart';
+import 'package:kiosk_app/features/book-qr/book-qr-screen.dart';
+import 'package:kiosk_app/features/home/home.dart';
 
 import 'package:kiosk_app/utils/constants/colors.dart';
 import 'package:kiosk_app/utils/constants/sizes.dart';
 import 'package:kiosk_app/utils/device/device_utility.dart';
+import 'package:kiosk_app/utils/helpers/helper_functions.dart';
 
 class TAppBar extends StatelessWidget implements PreferredSizeWidget {
   const TAppBar({
@@ -18,6 +21,7 @@ class TAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.leadingIcon,
     this.showLogo = true,
     this.iconColor = TColors.black,
+    this.canPop = true,
   });
 
   final Widget? title;
@@ -27,6 +31,7 @@ class TAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? leadingOnPressed;
   final bool showLogo;
   final Color? iconColor;
+  final bool canPop;
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +49,24 @@ class TAppBar extends StatelessWidget implements PreferredSizeWidget {
         leading: showBackArrow
             ? IconButton(
                 onPressed: () {
-                  Get.back();
-                  TimerController.instance.resumeTimer();
-                  TimerController.instance.resetTimer();
+                  if (canPop) {
+                    TimerController.instance.resumeTimer();
+                    TimerController.instance.resetTimer();
+                    if (Get.currentRoute == '/BookQrScreen') {
+                      Get.offAll(() => const HomeScreen());
+                    } else {
+                      Get.back();
+                    }
+                  } else {
+                    THelperFunctions.showPaymentCancelAlert(
+                      'Cancel Payment!',
+                      'Are you want cancel your payment?',
+                      () {
+                        Get.off(() => const BookQrScreen());
+                      },
+                      dismisable: true,
+                    );
+                  }
                 },
                 icon: Icon(
                   Iconsax.arrow_left,

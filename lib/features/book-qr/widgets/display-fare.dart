@@ -6,7 +6,6 @@ import 'package:kiosk_app/common/widgets/button/t_neomarphism_btn.dart';
 import 'package:kiosk_app/features/book-qr/controller/book-qr-controller.dart';
 import 'package:kiosk_app/features/book-qr/controller/station_list_controller.dart';
 import 'package:kiosk_app/utils/constants/colors.dart';
-import 'package:kiosk_app/utils/constants/qr_merchant_id.dart';
 import 'package:kiosk_app/utils/helpers/helper_functions.dart';
 import 'package:kiosk_app/utils/local_storage/storage_utility.dart';
 

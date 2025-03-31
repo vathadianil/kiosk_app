@@ -33,6 +33,7 @@ class GenerateTicketController extends GetxController {
   final bookQrRepository = Get.put(BookQrRepository());
   Timer? _timer;
   var isDataFound = false.obs;
+  var isApiPoolingStarted = false;
 
   late MqttServerClient client;
   String brokerUrl = "mqtt.afc-transit.com"; // Your MQTT broker URL
@@ -47,6 +48,19 @@ class GenerateTicketController extends GetxController {
     } else {
       startApiPolling(); // Start API polling when the controller is initialized
     }
+  }
+
+  swithToApiPolling() {
+    if (TLocalStorage().readData('useMqtt') == 'Y') {
+      if (client.connectionStatus!.state == MqttConnectionState.connected) {
+        if (kDebugMode) {
+          print("🔌 Disconnecting MQTT client...");
+        }
+        client.disconnect();
+        isConnected.value = false;
+      }
+    }
+    startApiPolling();
   }
 
   /// Connect to MQTT Broker and Subscribe to Topic
@@ -76,19 +90,27 @@ class GenerateTicketController extends GetxController {
     client.connectionMessage = connMessage;
 
     try {
-      print("🔌 Connecting to MQTT...");
+      if (kDebugMode) {
+        print("🔌 Connecting to MQTT...");
+      }
       await client.connect();
       if (client.connectionStatus!.state == MqttConnectionState.connected) {
-        print("✅ Connected to MQTT broker");
+        if (kDebugMode) {
+          print("✅ Connected to MQTT broker");
+        }
         isConnected.value = true;
         subscribeToTopic(orderId);
       } else {
-        print(
-            "❌ Failed to connect to MQTT. Status: ${client.connectionStatus}");
+        if (kDebugMode) {
+          print(
+              "❌ Failed to connect to MQTT. Status: ${client.connectionStatus}");
+        }
         isConnected.value = false;
       }
     } catch (e) {
-      print("❌ MQTT Connection Error: $e");
+      if (kDebugMode) {
+        print("❌ MQTT Connection Error: $e");
+      }
       isConnected.value = false;
       reconnectMqtt(); // Try to reconnect if connection fails
     }
@@ -98,7 +120,9 @@ class GenerateTicketController extends GetxController {
   void reconnectMqtt() {
     Future.delayed(const Duration(seconds: 5), () {
       if (!isConnected.value) {
-        print("🔄 Attempting to reconnect...");
+        if (kDebugMode) {
+          print("🔄 Attempting to reconnect...");
+        }
         connectToMqtt(createOrderData.orderId ?? '');
       }
     });
@@ -106,7 +130,9 @@ class GenerateTicketController extends GetxController {
 
   /// Handle MQTT Connection Success
   void onConnected() {
-    print("✅ MQTT Connection Established.");
+    if (kDebugMode) {
+      print("✅ MQTT Connection Established.");
+    }
     isConnected.value = true;
   }
 
@@ -120,7 +146,9 @@ class GenerateTicketController extends GetxController {
   void subscribeToTopic(String orderId) {
     final topic = orderId;
     client.subscribe(topic, MqttQos.atMostOnce);
-    print("📡 Subscribed to topic: $topic");
+    if (kDebugMode) {
+      print("📡 Subscribed to topic: $topic");
+    }
 
     // Listen for incoming messages
     client.updates!.listen((List<MqttReceivedMessage<MqttMessage>> messages) {
@@ -276,7 +304,7 @@ class GenerateTicketController extends GetxController {
   void onClose() {
     super.onClose();
 
-    if (TLocalStorage().readData('useMqtt') == 'Y') {
+    if (TLocalStorage().readData('useMqtt') == 'Y' && !isApiPoolingStarted) {
       if (client.connectionStatus!.state == MqttConnectionState.connected) {
         if (kDebugMode) {
           print("🔌 Disconnecting MQTT client...");

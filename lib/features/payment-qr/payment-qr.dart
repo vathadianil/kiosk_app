@@ -16,6 +16,7 @@ import 'package:kiosk_app/utils/constants/image_strings.dart';
 import 'package:kiosk_app/utils/constants/text_size.dart';
 import 'package:kiosk_app/utils/device/device_utility.dart';
 import 'package:kiosk_app/features/payment-qr/controllers/generate_ticket_controller.dart';
+import 'package:kiosk_app/utils/helpers/helper_functions.dart';
 import 'package:kiosk_app/utils/loaders/animation_loader.dart';
 import 'package:kiosk_app/utils/local_storage/storage_utility.dart';
 
@@ -43,7 +44,7 @@ class PaymentQrScreen extends StatelessWidget {
     final sourceStationId = TLocalStorage().readData('sourceStationId');
     final sourceStationName = TLocalStorage().readData('sourceStationName');
     Get.put(StationListController());
-    final paymentTimerController = Get.put(PaymentTimerController(
+    Get.put(GenerateTicketController(
       ticketType: ticketType,
       destination: destination,
       createOrderData: createOrderData,
@@ -51,7 +52,7 @@ class PaymentQrScreen extends StatelessWidget {
       finalFare: finalFare,
       fareQouteId: fareQouteId,
     ));
-    Get.put(GenerateTicketController(
+    final paymentTimerController = Get.put(PaymentTimerController(
       ticketType: ticketType,
       destination: destination,
       createOrderData: createOrderData,
@@ -65,6 +66,7 @@ class PaymentQrScreen extends StatelessWidget {
       backgroundColor: TColors.black,
       appBar: TAppBar(
         showBackArrow: true,
+        canPop: false,
         iconColor: TColors.white,
         title: Text(
           '',
@@ -88,7 +90,8 @@ class PaymentQrScreen extends StatelessWidget {
               () => Column(
                 children: [
                   if (GenerateTicketController.instance.isConnected.value ||
-                      !(TLocalStorage().readData('useMqtt') == 'Y'))
+                      !(TLocalStorage().readData('useMqtt') == 'Y') ||
+                      GenerateTicketController.instance.isApiPoolingStarted)
                     PaymentQrDisplaySection(
                         createTerminalTrxData: createTerminalTrxData)
                   else
@@ -122,9 +125,16 @@ class PaymentQrScreen extends StatelessWidget {
                   ),
                   TNeomarphismBtn(
                     onPressed: () {
-                      TimerController.instance.resumeTimer();
-                      TimerController.instance.resetTimer();
-                      Get.offAll(() => const HomeScreen());
+                      THelperFunctions.showPaymentCancelAlert(
+                        'Cancel Payment!',
+                        'Are you want cancel your payment?',
+                        () {
+                          TimerController.instance.resumeTimer();
+                          TimerController.instance.resetTimer();
+                          Get.offAll(() => const HomeScreen());
+                        },
+                        dismisable: true,
+                      );
                     },
                     child: const Text('Cancel Payment'),
                   ),
