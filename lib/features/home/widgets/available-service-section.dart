@@ -48,16 +48,16 @@ class AvailableServiceSection extends StatelessWidget {
                 TImages.ticket,
                 width: screenWidth * .2,
               ),
-              SizedBox(
-                height: screenWidth * .02,
-              ),
+              // SizedBox(
+              //   height: screenWidth * .02,
+              // ),
               Text(
                 'Tap the button below to book your ticket',
                 style: Theme.of(context).textTheme.labelLarge,
                 textAlign: TextAlign.center,
               ),
               SizedBox(
-                height: screenWidth * .05,
+                height: screenWidth * .03,
               ),
               Obx(
                 () => TNeomarphismBtn(
@@ -79,7 +79,10 @@ class AvailableServiceSection extends StatelessWidget {
                         .copyWith(color: TColors.white),
                   ),
                 ),
-              )
+              ),
+              SizedBox(
+                height: screenWidth * .1,
+              ),
             ],
           )),
         ),
