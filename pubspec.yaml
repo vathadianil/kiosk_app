@@ -54,6 +54,7 @@ dependencies:
 
   #Dropdown package
   dropdown_search: ^5.0.0
+  sqflite: ^2.3.3+1
   #--------------- ./ PACKAGES END ------------------#
 
 dev_dependencies:

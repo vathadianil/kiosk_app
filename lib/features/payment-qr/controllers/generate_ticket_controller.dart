@@ -8,6 +8,7 @@ import 'package:kiosk_app/features/payment-qr/models/payment-confim-model.dart';
 import 'package:kiosk_app/repositories/book-qr/book-qr-repository.dart';
 import 'package:kiosk_app/services/log_service.dart';
 import 'package:kiosk_app/utils/constants/qr_merchant_id.dart';
+import 'package:kiosk_app/utils/db/database_helper.dart';
 import 'package:kiosk_app/utils/local_storage/storage_utility.dart';
 import 'package:logger/logger.dart';
 import 'package:mqtt_client/mqtt_client.dart';
@@ -47,9 +48,9 @@ class GenerateTicketController extends GetxController {
 
   @override
   void onInit() async {
+    super.onInit();
     await LogService().init();
     logger = LogService().logger;
-    super.onInit();
     if (TLocalStorage().readData('useMqtt') == 'Y') {
       connectToMqtt(createOrderData.orderId ?? '');
     } else {
@@ -252,6 +253,32 @@ class GenerateTicketController extends GetxController {
       final requestPayload = await prepareGenerateTicketPayload();
       final ticketData = await bookQrRepository.generateTicket(requestPayload);
       if (ticketData.returnCode == '0' && ticketData.returnMsg == 'SUCESS') {
+        for (var ticket in ticketData.tickets!) {
+          final result = await DatabaseHelperController.instance.insertData(
+            'ticket_info',
+            {
+              'purchaseId': ticketData.ltmrhlPurchaseId,
+              'ticketId': ticket.ticketId,
+              'ticketContent': ticket.ticketContent,
+              'fromStationId': ticket.fromStationId,
+              'toStationId': ticket.toStationId,
+              'ticketTypeId': ticket.ticketTypeId,
+              'ticketStatus': ticket.ticketStatus,
+              'entryExitType': ticket.entryExitType,
+              'platFormNo': ticket.platFormNo,
+              'ticketExpiryTime': ticket.ticketExpiryTime,
+              'carbonEmissionMsg': ticket.carbonEmissionMsg,
+              'orderId': ticketData.orderId
+            },
+          );
+          if (kDebugMode) {
+            if (result != -1) {
+              print('Database Insertion success');
+            } else {
+              print('Database Insertion success');
+            }
+          }
+        }
         Get.off(() => DisplayQrScreen(
             tickets: ticketData.tickets ?? [],
             stationList: StationListController.instance.stationList,

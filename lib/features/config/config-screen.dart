@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:kiosk_app/common/components/custom_drop_down.dart';
 import 'package:kiosk_app/common/widgets/button/t_neomarphism_btn.dart';
 import 'package:kiosk_app/common/widgets/dropdown/t_dropdown.dart';
@@ -18,7 +17,7 @@ class ConfigScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(ConfigControoler());
+    final controller = Get.put(ConfigController());
     final screenWidth = TDeviceUtils.getScreenWidth(context);
     final stationListController = Get.put(StationListController());
     return Scaffold(
@@ -213,7 +212,7 @@ class ConfigScreen extends StatelessWidget {
                             if (controller.useMqtt.value == 'Y')
                               CustomDropdown(
                                 labelText: 'Swith to Api Polling',
-                                value: controller.swtichToApiPolling.value,
+                                value: controller.switchToApiPolling.value,
                                 helperText:
                                     'Yes -> Switches to Api polling after 90 seconds',
                                 items: const [
@@ -237,7 +236,7 @@ class ConfigScreen extends StatelessWidget {
 
                                 onChanged: (value) {
                                   if (value != '') {
-                                    controller.swtichToApiPolling.value =
+                                    controller.switchToApiPolling.value =
                                         value!;
                                   }
                                 }, // Set to null when not editable
