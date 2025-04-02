@@ -10,6 +10,7 @@ import 'package:kiosk_app/features/display-qr/controllers/display-qr-controller.
 import 'package:kiosk_app/features/display-qr/widgets/display-info-row.dart';
 import 'package:kiosk_app/features/display-qr/widgets/go-to-home-btn.dart';
 import 'package:kiosk_app/features/payment-qr/models/payment-confim-model.dart';
+import 'package:kiosk_app/utils/constants/app_constants.dart';
 import 'package:kiosk_app/utils/constants/colors.dart';
 import 'package:kiosk_app/utils/constants/image_strings.dart';
 import 'package:kiosk_app/utils/helpers/helper_functions.dart';
@@ -51,8 +52,11 @@ class DisplayQrContainer extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         TGlassContainer(
-          height: screenHeight * .47,
-          width: screenWidth * .62,
+          height: AppConstants.isLargeScreen
+              ? screenHeight * .47
+              : screenHeight * .6,
+          width:
+              AppConstants.isLargeScreen ? screenWidth * .62 : screenWidth * .8,
           child: Padding(
             padding: EdgeInsets.all(screenWidth * .05),
             child: Column(
