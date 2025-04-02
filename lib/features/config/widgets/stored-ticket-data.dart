@@ -19,13 +19,13 @@ class StoredTicketData extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: screenWidth * .03),
         child: dataController.isLoading.value
             ? const Center(child: CircularProgressIndicator())
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: SizedBox(
-                      width: screenWidth * .9,
+            : SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      // width: screenWidth * .9,
                       height: screenWidth,
                       child: Column(
                         children: [
@@ -78,8 +78,8 @@ class StoredTicketData extends StatelessWidget {
                         ],
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
       ),
     );

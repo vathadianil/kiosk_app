@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:kiosk_app/services/log_service.dart ';
-import 'package:kiosk_app/utils/constants/qr_merchant_id.dart';
+import 'package:kiosk_app/utils/constants/app_constants.dart';
 
 class THttpHelper {
-  static const String _baseUrl = QrMerchantDetails.isProd
+  static const String _baseUrl = AppConstants.isProd
       ? 'https://prodapi.afc-transit.com' //PROD
       : 'https://uatapi.afc-transit.com'; //UAT
 

@@ -7,7 +7,6 @@ import 'package:kiosk_app/features/display-qr/display-qr-screen.dart';
 import 'package:kiosk_app/features/payment-qr/models/payment-confim-model.dart';
 import 'package:kiosk_app/repositories/book-qr/book-qr-repository.dart';
 import 'package:kiosk_app/services/log_service.dart';
-import 'package:kiosk_app/utils/constants/qr_merchant_id.dart';
 import 'package:kiosk_app/utils/db/database_helper.dart';
 import 'package:kiosk_app/utils/local_storage/storage_utility.dart';
 import 'package:logger/logger.dart';
@@ -15,6 +14,7 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'dart:async';
 import 'dart:convert';
+import 'package:kiosk_app/utils/constants/app_constants.dart';
 
 class GenerateTicketController extends GetxController {
   static GenerateTicketController get instance => Get.find();
@@ -328,7 +328,7 @@ class GenerateTicketController extends GetxController {
       "customerName": '',
       "customerEmail": '',
       "merchantOrderId": createOrderData.orderId,
-      "merchantId": QrMerchantDetails.TSAVAARI_MERCHANT_ID,
+      "merchantId": AppConstants.TSAVAARI_MERCHANT_ID,
       "transType": "0",
       "fromStationId": fromStationId,
       "toStationId": toStationId,

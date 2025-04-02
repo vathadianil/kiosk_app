@@ -5,7 +5,6 @@ import 'package:encrypt/encrypt.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class QREncryptionService {
-  static const isEnabled = false;
   static Map<String, Object?> decryptData(String encryptedText) {
     try {
       // Clean up the encrypted text (remove quotes and spaces if present)

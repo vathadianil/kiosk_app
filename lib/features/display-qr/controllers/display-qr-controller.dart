@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kiosk_app/common/controllers/timer-controller.dart';
-import 'package:kiosk_app/utils/constants/timer_constants.dart';
 import 'package:kiosk_app/utils/helpers/printer_controller.dart';
+import 'package:kiosk_app/utils/constants/app_constants.dart';
 
 class PrintSubmitController extends GetxController {
   PrintSubmitController({
@@ -38,7 +38,7 @@ class PrintSubmitController extends GetxController {
       await PrinterController.instance.printTicket(ticketKeys[index]);
     }
     TimerController.instance
-        .resetTimer(maxWaitTime: TimerConstants.afterPrintAdTimer);
+        .resetTimer(maxWaitTime: AppConstants.afterPrintAdTimer);
     TimerController.instance.resumeTimer();
     PrinterController.instance.isPrinting.value = false;
   }

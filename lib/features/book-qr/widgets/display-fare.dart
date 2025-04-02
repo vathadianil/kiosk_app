@@ -77,7 +77,7 @@ class DisplayFare extends StatelessWidget {
             const Text(
               'No. of Passengers',
             ),
-            TNeomarphismBtn(
+            TNeomorphismBtn(
               child: Row(
                 children: [
                   IconButton(
@@ -158,7 +158,7 @@ class DisplayFare extends StatelessWidget {
           children: [
             SizedBox(
               width: screenWidth * .3,
-              child: TNeomarphismBtn(
+              child: TNeomorphismBtn(
                 onPressed: () {
                   TimerController.instance.resetTimer();
                   bookQrController.generateTicket();

@@ -24,7 +24,7 @@ class GotoHomeBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TNeomarphismBtn(
+    return TNeomorphismBtn(
       onPressed: () async {
         if (!checkSubmittedStutus ||
             displayQrController.isPrintSubmitted.value) {

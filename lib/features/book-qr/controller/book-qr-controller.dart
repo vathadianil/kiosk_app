@@ -8,7 +8,7 @@ import 'package:kiosk_app/features/payment-qr/payment-qr.dart';
 import 'package:kiosk_app/repositories/book-qr/book-qr-repository.dart';
 import 'package:kiosk_app/utils/constants/api_constants.dart';
 import 'package:kiosk_app/utils/constants/image_strings.dart';
-import 'package:kiosk_app/utils/constants/qr_merchant_id.dart';
+import 'package:kiosk_app/utils/constants/app_constants.dart';
 import 'package:kiosk_app/utils/constants/ticket_status_codes.dart';
 import 'package:kiosk_app/utils/helpers/network_manager.dart';
 import 'package:kiosk_app/utils/local_storage/storage_utility.dart';
@@ -80,7 +80,7 @@ class BookQrController extends GetxController {
       final payload = {
         "token": "$token",
         "fromStationId": fromStationId,
-        "merchant_id": QrMerchantDetails.TSAVAARI_MERCHANT_ID,
+        "merchant_id": AppConstants.TSAVAARI_MERCHANT_ID,
         "ticketTypeId": ticketType.value, //SJT = 10 RJT=20
         "toStationId": toStationId,
         "travelDatetime": "${DateTime.now()}",
@@ -124,7 +124,7 @@ class BookQrController extends GetxController {
       final phoneNumber = TLocalStorage().readData('mobileNo');
       final terminalId = int.tryParse(TLocalStorage().readData('terminalId'));
       final orderId = "KSKP$terminalId${DateTime.now().millisecondsSinceEpoch}";
-      bool isProd = QrMerchantDetails.isProd;
+      bool isProd = AppConstants.isProd;
 
       final payload = {
         "order_amount": getOrderAmount(),

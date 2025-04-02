@@ -116,7 +116,7 @@ class HomeScreen extends StatelessWidget {
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.end,
                                                 children: [
-                                                  TNeomarphismBtn(
+                                                  TNeomorphismBtn(
                                                     onPressed: () {
                                                       settingsController
                                                           .onSubmit();

@@ -68,6 +68,4 @@ class TSizes {
   static const double gridViewSpacing = 16.0;
 
   static const double smallSceenSize = 360;
-
-  static const bool isLargeScreen = true;
 }

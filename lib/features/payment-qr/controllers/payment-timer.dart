@@ -3,8 +3,7 @@ import 'package:get/get.dart';
 import 'package:kiosk_app/features/book-qr/models/create_spos_order.dart';
 import 'package:kiosk_app/features/book-qr/widgets/payment_processing_screen.dart';
 import 'package:kiosk_app/features/payment-qr/controllers/generate_ticket_controller.dart';
-import 'package:kiosk_app/utils/constants/qr_merchant_id.dart';
-import 'package:kiosk_app/utils/constants/timer_constants.dart';
+import 'package:kiosk_app/utils/constants/app_constants.dart';
 import 'package:kiosk_app/utils/local_storage/storage_utility.dart';
 
 class PaymentTimerController extends GetxController {
@@ -19,7 +18,7 @@ class PaymentTimerController extends GetxController {
   static PaymentTimerController get instance => Get.find();
   Timer? _timer;
 
-  var secondsElapsed = TimerConstants.paymentWaitTimer.obs;
+  var secondsElapsed = AppConstants.paymentWaitTimer.obs;
 
   final String ticketType;
   final String destination;
@@ -39,7 +38,7 @@ class PaymentTimerController extends GetxController {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (secondsElapsed.value > 0) {
         secondsElapsed.value--;
-        if (secondsElapsed.value < TimerConstants.apiPollingStartTimer &&
+        if (secondsElapsed.value < AppConstants.apiPollingStartTimer &&
             TLocalStorage().readData('useMqtt') == 'Y' &&
             TLocalStorage().readData('switchToApiPolling') == 'Y' &&
             !GenerateTicketController.instance.isDataFound.value) {
@@ -97,7 +96,7 @@ class PaymentTimerController extends GetxController {
       "customerName": '',
       "customerEmail": '',
       "merchantOrderId": createOrderData.orderId,
-      "merchantId": QrMerchantDetails.TSAVAARI_MERCHANT_ID,
+      "merchantId": AppConstants.TSAVAARI_MERCHANT_ID,
       "transType": "0",
       "fromStationId": fromStationId,
       "toStationId": toStationId,

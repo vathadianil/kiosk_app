@@ -10,6 +10,7 @@ import 'package:kiosk_app/features/book-qr/models/qr_get_fare_model.dart';
 import 'package:kiosk_app/features/payment-qr/models/payment-confim-model.dart';
 import 'package:kiosk_app/services/qr_encryption_service.dart';
 import 'package:kiosk_app/utils/constants/api_constants.dart';
+import 'package:kiosk_app/utils/constants/app_constants.dart';
 import 'package:kiosk_app/utils/exceptions/format_exceptions.dart';
 import 'package:kiosk_app/utils/exceptions/platform_exceptions.dart';
 import 'package:kiosk_app/utils/http/http_client.dart';
@@ -27,15 +28,14 @@ class BookQrRepository extends GetxController {
 
   Future<QrGetFareModel> fetchFare(payload) async {
     try {
-      final modifiedPayload = QREncryptionService.isEnabled
-          ? getEncryptedPayload(payload)
-          : payload;
+      final modifiedPayload =
+          AppConstants.isEnabled ? getEncryptedPayload(payload) : payload;
 
       var data = await THttpHelper.post(
         ApiEndPoint.getFare,
         modifiedPayload,
       );
-      if (QREncryptionService.isEnabled) {
+      if (AppConstants.isEnabled) {
         data = QREncryptionService.decryptData(data['response']);
       }
       return QrGetFareModel.fromJson(data);
@@ -114,14 +114,13 @@ class BookQrRepository extends GetxController {
 
   Future<QrTicketModel> generateTicket(payload) async {
     try {
-      final modifiedPayload = QREncryptionService.isEnabled
-          ? getEncryptedPayload(payload)
-          : payload;
+      final modifiedPayload =
+          AppConstants.isEnabled ? getEncryptedPayload(payload) : payload;
       var data = await THttpHelper.post(
         ApiEndPoint.generateTicket,
         modifiedPayload,
       );
-      if (QREncryptionService.isEnabled) {
+      if (AppConstants.isEnabled) {
         data = QREncryptionService.decryptData(data['response']);
       }
       return QrTicketModel.fromJson(data);

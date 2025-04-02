@@ -1,13 +1,11 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:kiosk_app/common/controllers/neomarphism_btn_controller.dart';
 import 'package:kiosk_app/common/controllers/timer-controller.dart';
 import 'package:kiosk_app/common/widgets/button/t_neomarphism_btn.dart';
 import 'package:kiosk_app/common/widgets/containers/t_glass_container.dart';
 import 'package:kiosk_app/features/book-qr/book-qr-screen.dart';
 import 'package:kiosk_app/features/home/controllers/setting_controller.dart';
+import 'package:kiosk_app/utils/constants/app_constants.dart';
 import 'package:kiosk_app/utils/constants/colors.dart';
 import 'package:kiosk_app/utils/constants/image_strings.dart';
 import 'package:kiosk_app/utils/device/device_utility.dart';
@@ -21,22 +19,21 @@ class AvailableServiceSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = TDeviceUtils.getScreenWidth(context);
-    final btnController = Get.put(NeomorphismBtnController());
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         TGlassContainer(
           onPressed: () async {
-            btnController.onButtonPressed('bookqr');
-            Timer(const Duration(milliseconds: 100), () {
-              btnController.onButtonPressed('');
-            });
             TimerController.instance.resetTimer();
-            SettingController.instance.tapCount.value = 0;
+            SettingController.instance.tapCount.value =
+                0; //Resetting settings tap value
             Get.to(() => const BookQrScreen());
           },
-          width: screenWidth * .4,
-          height: screenWidth * .4,
+          width:
+              AppConstants.isLargeScreen ? screenWidth * .4 : screenWidth * .6,
+          height:
+              AppConstants.isLargeScreen ? screenWidth * .4 : screenWidth * .6,
           borderRadius: screenWidth * .5,
           child: Center(
               child: Column(
@@ -46,7 +43,9 @@ class AvailableServiceSection extends StatelessWidget {
             children: [
               LottieBuilder.asset(
                 TImages.ticket,
-                width: screenWidth * .2,
+                width: AppConstants.isLargeScreen
+                    ? screenWidth * .2
+                    : screenWidth * .3,
               ),
               // SizedBox(
               //   height: screenWidth * .02,
@@ -59,27 +58,23 @@ class AvailableServiceSection extends StatelessWidget {
               SizedBox(
                 height: screenWidth * .03,
               ),
-              Obx(
-                () => TNeomarphismBtn(
-                  onPressed: () async {
-                    btnController.onButtonPressed('bookqr');
-                    Timer(const Duration(milliseconds: 100), () {
-                      btnController.onButtonPressed('');
-                    });
-                    TimerController.instance.resetTimer();
-                    SettingController.instance.tapCount.value = 0;
-                    Get.to(() => const BookQrScreen());
-                  },
-                  showBoxShadow: btnController.btnId.value != 'bookqr',
-                  child: Text(
-                    'Book Ticket',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge!
-                        .copyWith(color: TColors.white),
-                  ),
+              TNeomorphismBtn(
+                onPressed: () async {
+                  TimerController.instance.resetTimer();
+                  SettingController.instance.tapCount.value = 0;
+                  Get.to(() => const BookQrScreen());
+                },
+                showBoxShadow: true,
+                animateBoxShadow: true,
+                child: Text(
+                  'Book Ticket',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge!
+                      .copyWith(color: TColors.white),
                 ),
               ),
+
               SizedBox(
                 height: screenWidth * .1,
               ),

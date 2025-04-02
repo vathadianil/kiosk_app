@@ -279,7 +279,7 @@ class PaymentProcessingScreen extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Obx(
-                                        () => TNeomarphismBtn(
+                                        () => TNeomorphismBtn(
                                             btnColor: PrinterController
                                                     .instance.isPrinting.value
                                                 ? TColors.grey

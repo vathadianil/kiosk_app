@@ -4,8 +4,8 @@ import 'package:kiosk_app/features/book-qr/models/business_hours_model.dart';
 import 'package:kiosk_app/features/book-qr/models/station_list_model.dart';
 import 'package:kiosk_app/features/book-qr/models/token_model.dart';
 import 'package:kiosk_app/services/qr_encryption_service.dart';
-
 import 'package:kiosk_app/utils/constants/api_constants.dart';
+import 'package:kiosk_app/utils/constants/app_constants.dart';
 import 'package:kiosk_app/utils/exceptions/format_exceptions.dart';
 import 'package:kiosk_app/utils/exceptions/platform_exceptions.dart';
 import 'package:kiosk_app/utils/http/http_client.dart';
@@ -32,7 +32,7 @@ class StationListRepository extends GetxController {
         ApiEndPoint.getStations,
         {"token": token},
       );
-      if (QREncryptionService.isEnabled) {
+      if (AppConstants.isEnabled) {
         data = QREncryptionService.decryptData(data['response']);
       }
       return StationDataModel.fromJson(data);
@@ -52,7 +52,7 @@ class StationListRepository extends GetxController {
         {"token": token},
       );
 
-      if (QREncryptionService.isEnabled) {
+      if (AppConstants.isEnabled) {
         data = QREncryptionService.decryptData(data['response']);
       }
 

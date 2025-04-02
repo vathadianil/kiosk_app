@@ -77,7 +77,7 @@ class BookQrBottomSheet extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Obx(
-                      () => TNeomarphismBtn(
+                      () => TNeomorphismBtn(
                         onPressed: () {
                           if (bookQrController.loading.value) {
                             return;
@@ -118,7 +118,7 @@ class BookQrBottomSheet extends StatelessWidget {
                       width: screenWidth * .05,
                     ),
                     Obx(
-                      () => TNeomarphismBtn(
+                      () => TNeomorphismBtn(
                         onPressed: () {
                           if (bookQrController.loading.value) {
                             return;

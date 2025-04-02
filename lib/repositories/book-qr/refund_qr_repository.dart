@@ -7,6 +7,7 @@ import 'package:kiosk_app/features/book-qr/models/refund_confirm_model.dart';
 import 'package:kiosk_app/features/book-qr/models/refund_preview_model.dart';
 import 'package:kiosk_app/services/qr_encryption_service.dart';
 import 'package:kiosk_app/utils/constants/api_constants.dart';
+import 'package:kiosk_app/utils/constants/app_constants.dart';
 import 'package:kiosk_app/utils/exceptions/format_exceptions.dart';
 import 'package:kiosk_app/utils/exceptions/platform_exceptions.dart';
 import 'package:kiosk_app/utils/http/http_client.dart';
@@ -22,15 +23,14 @@ class RefundQrRepository extends GetxController {
 
   Future<RefundPreviewModel> refundPreview(payload) async {
     try {
-      final modifiedPayload = QREncryptionService.isEnabled
-          ? getEncryptedPayload(payload)
-          : payload;
+      final modifiedPayload =
+          AppConstants.isEnabled ? getEncryptedPayload(payload) : payload;
 
       var data = await THttpHelper.post(
         ApiEndPoint.refundPreview,
         modifiedPayload,
       );
-      if (QREncryptionService.isEnabled) {
+      if (AppConstants.isEnabled) {
         data = QREncryptionService.decryptData(data['response']);
       }
       return RefundPreviewModel.fromJson(data);
@@ -85,16 +85,15 @@ class RefundQrRepository extends GetxController {
 
   Future<RefundConfirmModel> refundConfirm(payload) async {
     try {
-      final modifiedPayload = QREncryptionService.isEnabled
-          ? getEncryptedPayload(payload)
-          : payload;
+      final modifiedPayload =
+          AppConstants.isEnabled ? getEncryptedPayload(payload) : payload;
 
       var data = await THttpHelper.post(
         ApiEndPoint.refundConfirm,
         modifiedPayload,
       );
 
-      if (QREncryptionService.isEnabled) {
+      if (AppConstants.isEnabled) {
         data = QREncryptionService.decryptData(data['response']);
       }
 

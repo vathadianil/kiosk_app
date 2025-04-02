@@ -123,7 +123,7 @@ class PaymentQrScreen extends StatelessWidget {
                   SizedBox(
                     height: screenWidth * .03,
                   ),
-                  TNeomarphismBtn(
+                  TNeomorphismBtn(
                     onPressed: () {
                       THelperFunctions.showPaymentCancelAlert(
                         'Cancel Payment!',
