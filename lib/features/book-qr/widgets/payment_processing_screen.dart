@@ -9,6 +9,7 @@ import 'package:kiosk_app/features/book-qr/models/create_spos_order.dart';
 import 'package:kiosk_app/features/display-qr/controllers/display-qr-controller.dart';
 import 'package:kiosk_app/features/display-qr/widgets/go-to-home-btn.dart';
 import 'package:kiosk_app/features/payment-qr/models/payment-confim-model.dart';
+import 'package:kiosk_app/utils/constants/app_constants.dart';
 import 'package:kiosk_app/utils/constants/colors.dart';
 import 'package:kiosk_app/utils/constants/image_strings.dart';
 import 'package:kiosk_app/utils/constants/sizes.dart';
@@ -59,8 +60,12 @@ class PaymentProcessingScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         TGlassContainer(
-                          width: screenWidth * .6,
-                          height: screenHeight * .7,
+                          width: AppConstants.isLargeScreen
+                              ? screenWidth * .6
+                              : screenWidth * .9,
+                          height: AppConstants.isLargeScreen
+                              ? screenHeight * .7
+                              : screenHeight * .8,
                           child: Padding(
                             padding: EdgeInsets.all(screenWidth * .05),
                             child: Obx(
@@ -124,9 +129,9 @@ class PaymentProcessingScreen extends StatelessWidget {
                                           .headlineSmall!
                                           .copyWith(color: TColors.error),
                                     ),
-                                  const SizedBox(
-                                    height: TSizes.spaceBtwSections,
-                                  ),
+                                  // const SizedBox(
+                                  //   height: TSizes.spaceBtwSections,
+                                  // ),
                                   //-- Payment in Progress animation
                                   if (paymentProcessingController
                                           .isPaymentVerifing.value &&
@@ -158,9 +163,9 @@ class PaymentProcessingScreen extends StatelessWidget {
                                       text:
                                           'If any amount deducted will be refuned in 2-3 business days',
                                     ),
-                                  const SizedBox(
-                                    height: TSizes.spaceBtwItems,
-                                  ),
+                                  // const SizedBox(
+                                  //   height: TSizes.spaceBtwItems,
+                                  // ),
                                   if (retryPurchase &&
                                       !paymentProcessingController
                                           .hasPaymentVerifyRetriesCompleted
@@ -342,7 +347,9 @@ class PaymentProcessingScreen extends StatelessWidget {
                         //         .hasPaymentVerifyRetriesCompleted.value
                         )
                       SizedBox(
-                        width: screenWidth * .28,
+                        width: AppConstants.isLargeScreen
+                            ? screenWidth * .28
+                            : screenWidth * .5,
                         child: GotoHomeBtn(
                           screenWidth: screenWidth,
                           screenHeight: screenHeight,
