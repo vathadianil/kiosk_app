@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:kiosk_app/common/controllers/timer-controller.dart';
 import 'package:kiosk_app/common/widgets/containers/t_glass_container.dart';
 import 'package:kiosk_app/features/book-qr/models/create_terminla_transaction_model.dart';
+import 'package:kiosk_app/utils/constants/app_constants.dart';
 import 'package:kiosk_app/utils/constants/image_strings.dart';
 import 'package:kiosk_app/utils/constants/text_strings.dart';
 import 'package:kiosk_app/utils/device/device_utility.dart';
@@ -30,8 +31,10 @@ class PaymentQrDisplaySection extends StatelessWidget {
           onPressed: () async {
             TimerController.instance.resetTimer();
           },
-          width: screenWidth * .5,
-          height: screenWidth * .65,
+          width:
+              AppConstants.isLargeScreen ? screenWidth * .5 : screenWidth * .8,
+          height:
+              AppConstants.isLargeScreen ? screenWidth * .65 : screenWidth * .8,
           borderRadius: screenWidth * .05,
           child: Center(
               child: Column(
