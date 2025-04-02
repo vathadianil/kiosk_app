@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:kiosk_app/utils/constants/app_constants.dart';
 import 'package:kiosk_app/utils/constants/colors.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:kiosk_app/utils/constants/sizes.dart';
@@ -137,7 +138,9 @@ class TDropdown extends StatelessWidget {
               width: TSizes.xs,
             ),
           SizedBox(
-            width: screenWidth * .2,
+            width: AppConstants.isLargeScreen
+                ? screenWidth * .2
+                : screenWidth * .4,
             child: Text(
               selectedItem = selectedItem != ''
                   ? selectedItem ?? ''

@@ -9,6 +9,7 @@ import 'package:kiosk_app/features/book-qr/controller/trip-selection-btn-control
 import 'package:kiosk_app/features/book-qr/widgets/book-qr-bottom-sheet.dart';
 import 'package:kiosk_app/features/book-qr/widgets/map.dart';
 import 'package:kiosk_app/features/home/widgets/home-carousel.dart';
+import 'package:kiosk_app/utils/constants/app_constants.dart';
 import 'package:kiosk_app/utils/constants/colors.dart';
 import 'package:kiosk_app/utils/constants/sizes.dart';
 import 'package:kiosk_app/utils/constants/text_size.dart';
@@ -25,7 +26,7 @@ class BookQrScreen extends StatelessWidget {
     final stationController = Get.put(StationListController());
     Get.put(TripSelectionBtnController());
     final bookQrController = Get.put(BookQrController());
-    // Get.put(BusineessHoursController());
+    Get.put(BusineessHoursController());
     final sourceStationName = TLocalStorage().readData('sourceStationName');
 
     return Scaffold(
@@ -63,13 +64,17 @@ class BookQrScreen extends StatelessWidget {
                     children: [
                       if (stationController.isLoading.value)
                         ShimmerEffect(
-                          width: screenWidth * .3,
+                          width: AppConstants.isLargeScreen
+                              ? screenWidth * .3
+                              : screenWidth * .6,
                           height: 50,
                           color: TColors.grey,
                         )
                       else
                         SizedBox(
-                          width: screenWidth * .3,
+                          width: AppConstants.isLargeScreen
+                              ? screenWidth * .3
+                              : screenWidth * .6,
                           child: TDropdown(
                             value: bookQrController.destination.value != ''
                                 ? THelperFunctions.getStationFromStationId(

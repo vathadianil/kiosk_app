@@ -10,6 +10,7 @@ import 'package:kiosk_app/features/book-qr/controller/station_list_controller.da
 import 'package:kiosk_app/features/book-qr/controller/trip-selection-btn-controller.dart';
 import 'package:kiosk_app/features/book-qr/widgets/display-fare.dart';
 import 'package:kiosk_app/features/book-qr/widgets/qr_shimmer_container.dart';
+import 'package:kiosk_app/utils/constants/app_constants.dart';
 import 'package:kiosk_app/utils/constants/colors.dart';
 import 'package:kiosk_app/utils/constants/ticket_status_codes.dart';
 import 'package:kiosk_app/utils/device/device_utility.dart';
@@ -42,7 +43,7 @@ class BookQrBottomSheet extends StatelessWidget {
         TimerController.instance.resetTimer();
       },
       child: SizedBox(
-        height: screenWidth,
+        height: AppConstants.isLargeScreen ? screenWidth : screenWidth * 1.5,
         child: TBackgroundLinearGradient(
           child: Padding(
             padding: EdgeInsets.all(screenWidth * .05),
@@ -160,8 +161,12 @@ class BookQrBottomSheet extends StatelessWidget {
                   height: screenWidth * .05,
                 ),
                 TGlassContainer(
-                  width: screenWidth * .7,
-                  height: screenWidth * .5,
+                  width: AppConstants.isLargeScreen
+                      ? screenWidth * .7
+                      : screenWidth * .9,
+                  height: AppConstants.isLargeScreen
+                      ? screenWidth * .5
+                      : screenWidth * .8,
                   child: Padding(
                     padding: EdgeInsets.all(screenWidth * .05),
                     child: Obx(
