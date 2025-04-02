@@ -4,7 +4,7 @@ class CreateSposOrderModel {
   String? createdAt;
   CustomerDetails? customerDetails;
   String? entity;
-  String? orderAmount;
+  double? orderAmount;
   String? orderCurrency;
   String? orderExpiryTime;
   String? orderId;
@@ -42,7 +42,7 @@ class CreateSposOrderModel {
         ? CustomerDetails.fromJson(json['customer_details'])
         : null;
     entity = json['entity'];
-    orderAmount = json['order_amount'].toString();
+    orderAmount = json['order_amount'];
     orderCurrency = json['order_currency'];
     orderExpiryTime = json['order_expiry_time'];
     orderId = json['order_id'];

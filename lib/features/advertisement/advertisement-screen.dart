@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kiosk_app/common/controllers/timer-controller.dart';
-// import 'package:kiosk_app/common/controllers/timer-controller.dart';
 import 'package:kiosk_app/features/advertisement/controllers/advertisement-controller.dart';
 import 'package:kiosk_app/features/config/config-screen.dart';
 import 'package:kiosk_app/features/home/home.dart';

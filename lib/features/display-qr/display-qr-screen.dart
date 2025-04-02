@@ -29,7 +29,7 @@ class DisplayQrScreen extends StatelessWidget {
   final List<TicketsListModel> tickets;
   final List<StationListModel> stationList;
   final String orderId;
-  final String amountPaid;
+  final double amountPaid;
   final CreateSposOrderModel pgResponse;
   final PaymentConfirmModel? confirmOrderData;
 
@@ -116,7 +116,7 @@ class BuildTicket extends StatelessWidget {
   final List<TicketsListModel> tickets;
   final List<StationListModel> stationList;
   final String? orderId;
-  final String amountPaid;
+  final double amountPaid;
   final CreateSposOrderModel pgResponse;
   final PaymentConfirmModel? confirmOrderData;
   List<String> getPlatFormArray(String platform) {
@@ -394,7 +394,7 @@ class BuildTicket extends StatelessWidget {
                             .copyWith(color: TColors.black),
                       ),
                       Text(
-                        'Rs ${(double.tryParse(amountPaid) ?? 0 / tickets.length).toString()} /-',
+                        'Rs ${amountPaid / tickets.length}/-',
                         style: Theme.of(context)
                             .textTheme
                             .labelSmall!

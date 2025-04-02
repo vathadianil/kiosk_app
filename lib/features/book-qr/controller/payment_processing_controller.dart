@@ -81,7 +81,7 @@ class PaymentProcessingController extends GetxController {
               tickets: ticketData.tickets!,
               stationList: stationController.stationList,
               orderId: ticketData.orderId!,
-              amountPaid: verifyPaymentData.orderAmount!.toString(),
+              amountPaid: verifyPaymentData.orderAmount ?? 0,
               pgResponse: verifyPaymentData,
               confirmOrderData: confirmOrderData,
             ));
@@ -110,7 +110,7 @@ class PaymentProcessingController extends GetxController {
                 tickets: verifyGenerateTicketResponse.tickets!,
                 stationList: stationController.stationList,
                 orderId: verifyGenerateTicketResponse.orderId!,
-                amountPaid: verifyPaymentData.orderAmount!.toString(),
+                amountPaid: verifyPaymentData.orderAmount ?? 0,
                 pgResponse: verifyPaymentData,
                 confirmOrderData: confirmOrderData,
               ));
@@ -130,7 +130,7 @@ class PaymentProcessingController extends GetxController {
       final refundOrderResponse =
           await cashFreePaymentController.createRefundOrder(
         verifyPaymentData.orderId!,
-        verifyPaymentData.orderAmount!,
+        verifyPaymentData.orderAmount!.toString(),
         mobileNumber,
         int.parse(requestPayload['noOfTickets'].toString()),
         '',

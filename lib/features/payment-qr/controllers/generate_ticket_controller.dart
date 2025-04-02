@@ -268,7 +268,10 @@ class GenerateTicketController extends GetxController {
               'platFormNo': ticket.platFormNo,
               'ticketExpiryTime': ticket.ticketExpiryTime,
               'carbonEmissionMsg': ticket.carbonEmissionMsg,
-              'orderId': ticketData.orderId
+              'orderID': ticketData.orderId,
+              'amountPaid': (createOrderData.orderAmount ??
+                      0 / ticketData.tickets!.length)
+                  .toString()
             },
           );
           if (kDebugMode) {
@@ -283,7 +286,7 @@ class GenerateTicketController extends GetxController {
             tickets: ticketData.tickets ?? [],
             stationList: StationListController.instance.stationList,
             orderId: createOrderData.orderId ?? '',
-            amountPaid: createOrderData.orderAmount ?? '',
+            amountPaid: createOrderData.orderAmount ?? 0,
             pgResponse: createOrderData,
             confirmOrderData: confirmOrderData));
       } else {

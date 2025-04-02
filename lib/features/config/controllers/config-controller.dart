@@ -93,6 +93,7 @@ import 'package:kiosk_app/utils/popups/loaders.dart';
 import 'package:logger/logger.dart';
 
 class ConfigController extends GetxController {
+  static ConfigController get instance => Get.find();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final mobileController = TextEditingController();
   final terminalController = TextEditingController();

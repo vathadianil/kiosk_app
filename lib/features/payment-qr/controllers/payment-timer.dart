@@ -39,10 +39,9 @@ class PaymentTimerController extends GetxController {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (secondsElapsed.value > 0) {
         secondsElapsed.value--;
-        if (secondsElapsed.value <
-                (TimerConstants.paymentWaitTimer / 2).round() &&
+        if (secondsElapsed.value < TimerConstants.apiPollingStartTimer &&
             TLocalStorage().readData('useMqtt') == 'Y' &&
-            TLocalStorage().readData('swtichToApiPolling') == 'Y' &&
+            TLocalStorage().readData('switchToApiPolling') == 'Y' &&
             !GenerateTicketController.instance.isDataFound.value) {
           if (!GenerateTicketController.instance.isApiPoolingStarted) {
             GenerateTicketController.instance.isApiPoolingStarted = true;

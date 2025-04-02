@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:kiosk_app/features/book-qr/models/station_list_model.dart';
 import 'package:kiosk_app/repositories/book-qr/station_list_repository.dart';
+import 'package:kiosk_app/utils/db/database_helper.dart';
 import 'package:kiosk_app/utils/local_storage/storage_utility.dart';
 import 'package:kiosk_app/utils/popups/loaders.dart';
 
@@ -17,7 +18,9 @@ class StationListController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
+
     try {
+      // DatabaseHelperController.instance.dropTableAndCreateNewOne('ticket_info');
       final token = await TLocalStorage().readData('token') ?? '';
       final tokenExpirationTimeString =
           await TLocalStorage().readData('tokenExpirationTimeString') ?? '';

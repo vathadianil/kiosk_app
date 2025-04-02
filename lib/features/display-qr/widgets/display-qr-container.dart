@@ -34,7 +34,7 @@ class DisplayQrContainer extends StatelessWidget {
 
   final double screenHeight;
   final double screenWidth;
-  final String amountPaid;
+  final double amountPaid;
   final List<TicketsListModel> tickets;
   final List<StationListModel> stationList;
   final String? orderId;

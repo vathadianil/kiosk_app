@@ -25,7 +25,7 @@ class BookQrScreen extends StatelessWidget {
     final stationController = Get.put(StationListController());
     Get.put(TripSelectionBtnController());
     final bookQrController = Get.put(BookQrController());
-    Get.put(BusineessHoursController());
+    // Get.put(BusineessHoursController());
     final sourceStationName = TLocalStorage().readData('sourceStationName');
 
     return Scaffold(

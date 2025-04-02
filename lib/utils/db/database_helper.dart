@@ -56,7 +56,8 @@ class DatabaseHelperController extends GetxController {
       platFormNo TEXT,
       ticketExpiryTime TEXT,
       carbonEmissionMsg TEXT,
-      orderId TEXT
+      orderID TEXT,
+      amountPaid TEXT
       )
     ''');
   }
